@@ -1,0 +1,9 @@
+alias jacket_reset_cvars "resetcvar jacketarmour_spawn_bias; resetcvar jacketarmour_persistent_spawning;"
+alias fmk_reset_cvars "resetcvar fieldmedic_medikit_bias; resetcvar fieldmedic_stimpack_bias; resetcvar fieldmedic_persistent_spawning;"
+alias fas_reset_cvars "resetcvar firstaidspray_medikit_bias; resetcvar firstaidspray_stimpack_bias; resetcvar firstaidspray_persistent_spawning;"
+alias radicola_reset_cvars "resetcvar radicola_healthbonus_bias; resetcvar radicola_medikit_bias; resetcvar radicola_stimpack_bias; resetcvar radicola_gorebits_bias; resetcvar radicola_persistent_spawning;"
+alias radboots_reset_cvars "resetcvar radboots_spawn_bias; resetcvar radboots_persistent_spawning;"
+alias gravboots_reset_cvars "resetcvar gravboots_spawn_bias; resetcvar gravboots_persistent_spawning;"
+alias halfpack_reset_cvars "resetcvar halfpack_spawn_bias; resetcvar halfpack_persistent_spawning;"
+
+alias RTIP_Reset_Cvars "jacket_reset_cvars; fmk_reset_cvars; fas_reset_cvars; radicola_reset_cvars; radboots_reset_cvars; gravboots_reset_cvars; halfpack_reset_cvars;"

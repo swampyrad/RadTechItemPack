@@ -1,0 +1,488 @@
+// Field Medikit
+sprite FMKTA0, 18, 14{
+    offset 9, 14
+    patch FMKTA0, 0, 0
+}
+
+sprite FMKTB0, 18, 14{
+    offset 9, 14
+    patch FMKTA0, 0, 0{flipy}
+}
+
+//Half-Pack
+sprite HPAKA0, 22, 20{
+    offset 11,20
+    patch HPAKA0, 0, 0{}
+}
+
+sprite HPAKB0,20,22{
+	offset 10,22
+	xscale 0.83
+	yscale 1.2
+	patch HPAKA0,0,0{rotate 270}
+}
+sprite HPAKC0,22,21{
+	offset 11,21
+	patch STASQGR,4,0{}
+	patch HPAKA0,0,1{}
+}
+
+// Leather Jacket
+sprite JAKTA0,31,17{
+	offset 15,17
+	patch JAKTA0,0,0
+}
+
+graphic JAKET0,31,17{
+	offset 15,17
+	patch JAKTA0,0,0{translation "0:255=%[0,0,0]:[0.3,0.14,0]"}
+}
+
+//Boot sprites based off Doom Radsuit by iD Software
+sprite RDBTA0, 15, 16{
+	offset 7, 16
+	patch RDBTA0,0,0
+}
+
+sprite AGRVA0, 15, 16{
+	offset 7, 16
+	patch AGRVA0,0,0
+}
+
+//Can of Radi-Cola
+sprite RDCLA0,11,21{
+	offset 5,21
+	patch RDCLA0,0,0{}
+}
+
+//Empty Can of Radi-Cola
+sprite RDCLB0,12,19{
+	offset 6,19
+	patch RDCLB0,0,0{}
+}
+
+// First Aid Spray sprites by Ac!d from
+// the Hideous Destructor Discord server
+
+//pickup sprites
+sprite FAIDA0, 11, 27
+{   
+	offset 5, 27
+	patch FAIDA0,0,0
+}
+
+sprite FAIDC0, 27, 11
+{
+	offset 13, 11
+	patch FAIDC0,0,0
+}
+
+//HUD icon sprites
+sprite FAIDB0, 11, 27
+{
+    xscale 1.6
+    yscale 1.6
+	offset 5, 27
+	patch FAIDA0,0,0
+}
+
+sprite FAIDD0, 27, 11
+{
+    xscale 1.6
+    yscale 1.6
+	offset 13, 11
+	patch FAIDC0,0,0
+}
+
+//Cacodemon plush sprites created by Swampyrad
+//Renegade plush sprite edit by BenitezClance4
+
+//[  Pickup Sprites  ]
+
+//caco plush
+sprite CCPLA0, 21, 20{
+  offset 10, 20
+  patch CCPLA0, 0, 0{}
+}
+
+//Renegade caco plush
+sprite RCPLA0, 21, 20{
+  offset 10, 20
+  patch RCPLA0, 0, 0{}
+}
+
+//trans pride caco plush
+sprite TCPLA0, 21, 20{
+  offset 10, 20
+  patch TCPLA0, 0, 0{}
+}
+
+//ukraine caco plush
+sprite UCPLA0, 21, 20{
+  offset 10, 20
+  patch UCPLA0, 0, 0{}
+}
+
+//two-eyed caco plush
+sprite C2PLA0, 21, 20{
+  offset 10, 20
+  patch C2PLA0, 0, 0{}
+}
+
+//bi pride caco plush
+sprite BCPLA0, 21, 20{
+  offset 10, 20
+  patch BCPLA0, 0, 0{}
+}
+
+//gay pride caco plush
+sprite GCPLA0, 21, 20{
+  offset 10, 20
+  patch GCPLA0, 0, 0{}
+}
+
+//lesbian pride caco plush
+sprite LCPLA0, 21, 20{
+  offset 10, 20
+  patch LCPLA0, 0, 0{}
+}
+
+//trans pride caco plush
+sprite TCPLA0, 21, 20{
+  offset 10, 20
+  patch TCPLA0, 0, 0{}
+}
+
+//enby pride caco plush
+sprite NBPLA0, 21, 20{
+  offset 10, 20
+  patch NBPLA0, 0, 0{}
+}
+
+//pansexual pride caco plush
+sprite PSPLA0, 21, 20{
+  offset 10, 20
+  patch PSPLA0, 0, 0{}
+}
+
+//ace pride caco plush
+sprite ASPLA0, 21, 20{
+  offset 10, 20
+  patch ASPLA0, 0, 0{}
+}
+
+//aro pride caco plush
+sprite ARPLA0, 21, 20{
+  offset 10, 20
+  patch ARPLA0, 0, 0{}
+}
+
+//agender pride caco plush
+sprite AGPLA0, 21, 20{
+  offset 10, 20
+  patch AGPLA0, 0, 0{}
+}
+
+//felonious bolus plush
+sprite FBOLA0, 21, 20{
+  offset 10, 20
+  patch FBOLA0, 0, 0{}
+}
+
+//[  Weapon Sprites  ]
+
+//caco plush weapon sprite
+sprite CCPFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch CCPLA0, 0, 0{}
+}
+//caco plush squish
+sprite CCPFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch CCPLA0, 0, 0{}
+}
+sprite CCPFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch CCPLA0, 0, 0{}
+}
+
+//trans caco plush weapon sprite
+sprite TCPFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch TCPLA0, 0, 0{}
+}
+//trans caco plush squish
+sprite TCPFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch TCPLA0, 0, 0{}
+}
+sprite TCPFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch TCPLA0, 0, 0{}
+}
+
+//ukraine caco plush weapon sprite
+sprite UCPFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch UCPLA0, 0, 0{}
+}
+//ukraine caco plush squish
+sprite UCPFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch UCPLA0, 0, 0{}
+}
+sprite UCPFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch UCPLA0, 0, 0{}
+}
+
+//twoeyed caco plush weapon sprite
+sprite C2PFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch C2PLA0, 0, 0{}
+}
+//twoeyed caco plush squish
+sprite C2PFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch C2PLA0, 0, 0{}
+}
+sprite C2PFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch C2PLA0, 0, 0{}
+}
+
+
+//bi caco plush weapon sprite
+sprite BCPFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch BCPLA0, 0, 0{}
+}
+//bi caco plush squish
+sprite BCPFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch BCPLA0, 0, 0{}
+}
+sprite BCPFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch BCPLA0, 0, 0{}
+}
+
+//gay caco plush weapon sprite
+sprite GCPFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch GCPLA0, 0, 0{}
+}
+//gay caco plush squish
+sprite GCPFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch GCPLA0, 0, 0{}
+}
+sprite GCPFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch GCPLA0, 0, 0{}
+}
+
+//lesbian caco plush weapon sprite
+sprite LCPFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch LCPLA0, 0, 0{}
+}
+//lesbian caco plush squish
+sprite LCPFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch LCPLA0, 0, 0{}
+}
+sprite LCPFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch LCPLA0, 0, 0{}
+}
+
+//enby pride caco plush
+sprite NBPFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch NBPLA0, 0, 0{}
+}
+//enby caco plush squish
+sprite NBPFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch NBPLA0, 0, 0{}
+}
+sprite NBPFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch NBPLA0, 0, 0{}
+}
+
+//pansexual pride caco plush
+sprite PSPFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch PSPLA0, 0, 0{}
+}
+//pansexual caco plush squish
+sprite PSPFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch PSPLA0, 0, 0{}
+}
+sprite PSPFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch PSPLA0, 0, 0{}
+}
+
+//ace pride caco plush
+sprite ASPFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch ASPLA0, 0, 0{}
+}
+//ace caco plush squish
+sprite ASPFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch ASPLA0, 0, 0{}
+}
+sprite ASPFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch ASPLA0, 0, 0{}
+}
+
+//aro pride caco plush
+sprite ARPFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch ARPLA0, 0, 0{}
+}
+//aro caco plush squish
+sprite ARPFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch ARPLA0, 0, 0{}
+}
+sprite ARPFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch ARPLA0, 0, 0{}
+}
+
+//agender pride caco plush
+sprite AGPFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch AGPLA0, 0, 0{}
+}
+//agender caco plush squish
+sprite AGPFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch AGPLA0, 0, 0{}
+}
+sprite AGPFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch AGPLA0, 0, 0{}
+}
+
+//Renegade caco plush
+sprite RCPFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch RCPLA0, 0, 0{}
+}
+//Renegade caco plush squish
+sprite RCPFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch RCPLA0, 0, 0{}
+}
+sprite RCPFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch RCPLA0, 0, 0{}
+}
+
+//felonius bolus weapon sprite
+sprite FBOFA0, 21, 20{
+  xscale 0.25 
+  yscale 0.25
+  offset -50,-25
+  patch FBOLA0, 0, 0{}
+}
+
+//felonious bolus squish
+sprite FBOFB0, 21, 20{
+  xscale 0.25
+  yscale 0.30
+  offset -50,-33
+  patch FBOLA0, 0, 0{}
+}
+sprite FBOFC0, 21, 20{
+  xscale 0.25
+  yscale 0.40
+  offset -50,-45
+  patch FBOLA0, 0, 0{}
+}

@@ -1,0 +1,111 @@
+[enu default]
+
+// The Main Menu text along with its icon.
+RADTECHITEMS_MENU = "\c[Green]Ⓡ\c- Radtech Items Pack";
+
+// Item Tags, this shows in the loadout menu and if you hold 'Zoom' over an item with your fists out. Probably other places too. - [Ted]
+TAG_FIELDMEDICKIT = "Field Medical Kit";
+TAG_FIRSTAIDSPRAY = "First Aid Spray";
+TAG_RADICOLA = "Radi-Cola";
+TAG_HALFPACK = "Half-Pack";
+TAG_RADBOOTS = "Anti-Radiation Boots";
+TAG_GRAVBOOTS = "Anti-Gravity Boots";
+TAG_JACKET = "Leather Armour";
+
+
+
+// EVERYTHING below this is Menu stuff. Feast upon the horror. - [Ted]
+
+// Persistence
+MENU_REPLACEAFTERMAPLOAD = "Control whether replacements happen after a mapload.";
+MENU_PERSISTENCY = "Persistent Spawns: ";
+MENU_RESETPERSISTENCY = "Reset persistence options";
+
+// General Menu Stuff, shared with other mods.
+MENU_SPAWNOPTIONS = "Spawn Options";
+MENU_RESETOPTIONS = "Reset Options";
+MENU_RESETALLOPTIONS = "Reset all Options";
+MENU_LORETAG = "--- Lore ---";
+MENU_NOTICE = "Notice: ";
+MENU_SUPPRESS1 = "Setting 'spawn rate' to Replace All will suppress";
+MENU_SUPPRESS2 = "spawns of that given type.";
+MENU_SFIRECONVRATE = "Selectfire Conversion Rate: ";
+MENU_WEPSPAWNRATE = "Weapon Spawn Rate: ";
+MENU_WEPDROPRATE = "Weapon Drop Rate: ";
+MENU_MAGSPAWNRATE = "Mag Spawn Rate: ";
+MENU_RESETCONV = "Reset conv. options";
+MENU_RESETDROP = "Reset drop. options";
+MENU_RESETWEP = "Reset wep. options";
+MENU_RESETMAG = "Reset mag options";
+
+// Field Medic Kit
+MENU_TITLEFMK = "------ Field Medical Kit Options ------";
+MENU_FMKTEXT1 = "Control the spawn rate of the Field Medical Kits on Medikits";
+MENU_FMKTEXT2 = "Control the spawn rate of the Field Medical Kit on Stimpacks";
+
+MENU_FMKLORE1 = "stuff";
+MENU_FMKLORE2 = "goes";
+MENU_FMKLORE3 = "here uwu";
+
+// First Aid Spray
+MENU_TITLEFAS = "------ First Aid Spray Options ------";
+MENU_FASTEXT1 = "Control the spawn rate of First Aid Spray cans on Medikits";
+MENU_FASTEXT2 = "Control the spawn rate of First Aid Spray cans on Stimpacks";
+
+MENU_FASLORE1 = "stuff";
+MENU_FASLORE2 = "goes";
+MENU_FASLORE3 = "here uwu";
+
+// Radi-Cola
+MENU_TITLERDC = "------ Radi-Cola Options ------";
+MENU_RDCTEXT1 = "Control the spawn rate of Radi-Cola on Health Bonuses";
+MENU_RDCTEXT2 = "Control the spawn rate of Radi-Cola on Medikits";
+MENU_RDCTEXT3 = "Control the spawn rate of Radi-Cola on Stimpacks";
+MENU_RDCTEXT4 = "Control the spawn rate of Radi-Cola on Gore Bits";
+
+MENU_RDCLORE1 = "stuff";
+MENU_RDCLORE2 = "goes";
+MENU_RDCLORE3 = "here uwu";
+
+// Leather Armour
+MENU_TITLEJACKET = "------ Leather Armour Options ------";
+MENU_JACKETTEXT1 = "Control the spawn rate of Leather Armour on Garrison and Battle Armour";
+
+MENU_JACKETLORE1 = "stuff";
+MENU_JACKETLORE2 = "goes";
+MENU_JACKETLORE3 = "here uwu";
+
+// Half-Pack
+MENU_TITLEHALFPACK = "------ Half-Pack Options ------";
+MENU_HALFPACKTEXT1 = "Control the spawn rate of Half-Packs on Backpacks";
+
+MENU_HALFPACKLORE1 = "stuff";
+MENU_HALFPACKLORE2 = "goes";
+MENU_HALFPACKLORE3 = "here uwu";
+
+// Anti-Radiation Boots
+MENU_TITLERADBOOTS = "------ Anti-Radiation Boots Options ------";
+MENU_RADBOOTSTEXT1 = "Control the spawn rate of Anti-Radiation Boots on Radsuits";
+
+MENU_RADBOOTSLORE1 = "stuff";
+MENU_RADBOOTSLORE2 = "goes";
+MENU_RADBOOTSLORE3 = "here uwu";
+
+// Anti-Gravity Boots
+MENU_TITLEGRAVBOOTS = "------ Anti-Gravity Boots Options ------";
+MENU_GRAVBOOTSTEXT1 = "Control the spawn rate of Anti-Gravity Boots on Radsuits";
+
+MENU_GRAVBOOTSLORE1 = "stuff";
+MENU_GRAVBOOTSLORE2 = "goes";
+MENU_GRAVBOOTSLORE3 = "here uwu";
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,46 @@
+version "4.8.2"
+
+// Event Handler
+#include "zscript/RTIP-Event-Handler.zsc"
+
+// Medical
+#include "zscript/FieldMedicationKit.zsc"
+#include "zscript/FirstAidSpray.zsc"
+#include "zscript/Radi-Cola.zsc"
+
+// Wearables
+#include "zscript/LeatherArmor.zsc"
+#include "zscript/Anti-RadiationBoots.zsc"
+#include "zscript/Anti-GravityBoots.zsc"
+#include "zscript/Halfpack.zsc"
+
+// Misc
+#include "zscript/Radi-Radio.zsc"
+//#include "zscript/Cacodemon-Plushes.zsc"
+
+/*
+
+
+░░░░░░░░░░▄▄▀▀▀▀▀▀▀▀▀▄▄░░░░░░░░░░
+░░░░░░░░░█░░░░░░░░░░░░░█░░░░░░░░░
+░░░░░░░░█░░░░░░░░░░▄▄▄░░█░░░░░░░░
+░░░░░░░░█░░▄▄▄░░▄░░███░░█░░░░░░░░
+░░░░░░░░▄█░▄░░░▀▀▀░░░▄░█▄░░░░░░░░
+░░░░░░░░█░░▀█▀█▀█▀█▀█▀░░█░░░░░░░░
+░░░░░░░░▄██▄▄▀▀▀▀▀▀▀▄▄██▄░░░░░░░░
+░░░░░░▄█░█▀▀█▀▀▀█▀▀▀█▀▀█░█▄░░░░░░
+░░░░░▄▀░▄▄▀▄▄▀▀▀▄▀▀▀▄▄▀▄▄░▀▄░░░░░
+░░░░░█░░░░▀▄░█▄░░░▄█░▄▀░░░░█░░░░░
+░░░░░░▀▄▄░█░░█▄▄▄▄▄█░░█░▄▄▀░░░░░░
+░░░░░░░░▀██▄▄███████▄▄██▀░░░░░░░░
+░░░░░░░░████████▀████████░░░░░░░░
+░░░░░░░▄▄█▀▀▀▀█░░░█▀▀▀▀█▄▄░░░░░░░
+░░░░░░░▀▄▄▄▄▄▀▀░░░▀▀▄▄▄▄▄▀░░░░░░░
+
+* pretty functional now.
+* fitting release candidate.
+* caco plushies are still broken though.
+* should be pretty easy to fix, ey?
+* ha, if only. - [Ted]
+
+*/
