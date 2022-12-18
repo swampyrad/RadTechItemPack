@@ -156,7 +156,7 @@ class RTIPHandler : EventHandler
 		// Leather Armor
 		Array<RTIPSpawnItemEntry> spawns_jacketarmour;
 		spawns_jacketarmour.push(additementry('HDArmour', jacketarmour_spawn_bias));
-		additem('HDLeatherArmour', spawns_jacketarmour, jacketarmour_persistent_spawning, false);
+		additem('HDLeatherArmour', spawns_jacketarmour, jacketarmour_persistent_spawning);
 	}
 	
 	// Random stuff, stores it and forces negative values just to be 0.
