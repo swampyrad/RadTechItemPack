@@ -3,7 +3,7 @@
 //-------------------------------------------------
 const LEATHERARMOUR=50;
 const ENC_LEATHERARMOUR=160;
-const STRIP_JACKET=1500;
+const STRIP_JACKET=1200;
 
 // hey buddy, i think you got the wrong door, the leather club's 2 blocks down - [ted]
 class HDLeatherArmour:HDMagAmmo{
@@ -219,11 +219,10 @@ class HDLeatherArmourWorn:HDArmourWorn{
 	override void beginplay(){
 		durability=LEATHERARMOUR;
 		super.beginplay();
-		//if(mega)settag("battle armour");
 	}
 
 	override double RestrictSpeed(double speedcap){
-		return min(speedcap,4);//lighter than garrison armour
+		return min(speedcap,3.5);//lighter than garrison armour
 	}
 	override double getbulk(){
 		return (ENC_LEATHERARMOUR*0.1);

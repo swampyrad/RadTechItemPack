@@ -35,7 +35,7 @@ class WornRadBoots:HDDamageHandler{
 	}
 	override void DetachFromOwner(){
 		owner.A_TakeInventory("ProtectiveRadBoots",1);
-		HDArmour.ArmourChangeEffect(owner,60);
+		HDArmour.ArmourChangeEffect(owner,10);
 		//this triggers the stun effect when removing gear
 		//the number seems to control how long the stun lasts
 		
@@ -51,21 +51,6 @@ class WornRadBoots:HDDamageHandler{
 	}//lower speedcap since rad boots are thicker and more durable,	
 	 //but a bit heavy to walk in compared to a radsuit
 	 
-/* this is where the radsuit's visor overlay is handled,
-	can be useful for adding certain visual effects
-
-
-	override void DisplayOverlay(hdstatusbar sb,hdplayerpawn hpl){
-		sb.SetSize(0,320,200);
-		sb.BeginHUD(forcescaled:true);
-		sb.fill(
-			color(sb.blurred?(level.time&(1|2|4))<<2:160,10,40,14),
-			0,0,screen.getwidth(),screen.getheight()
-		);
-	}
-*/
-	//screw it, going back to the old DrawHUDStuff code,
-	//i'm not dealing with stupid statusbar bullshit
 	override void DrawHudStuff(
 		hdstatusbar sb,
 		hdplayerpawn hpl,
@@ -75,7 +60,7 @@ class WornRadBoots:HDDamageHandler{
 		bool am=hdflags&HDSB_AUTOMAP;
 		sb.drawimage(
 			"RDBTA0",
-			am?(11,137):(84,-3),
+			am?(11,137):(-120,-20),
 			am?sb.DI_TOPLEFT:
 			(sb.DI_SCREEN_CENTER_BOTTOM|sb.DI_ITEM_CENTER_BOTTOM)
 		);

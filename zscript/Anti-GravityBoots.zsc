@@ -3,7 +3,7 @@
 // Anti-Gravity Boots
 //-------------------------------------------------
 
-const STRIP_ANTIGRAVBOOTS=1500;
+const STRIP_ANTIGRAVBOOTS=1400;
 const ENC_ANTIGRAVBOOTS=35;
 const HDLD_ANTIGRAVBOOTS="AGV";//Anti-GraVity
 
@@ -62,7 +62,7 @@ class WornAntiGravBoots:HDDamageHandler{
 		let hp=HDPlayerPawn(owner);
         
         //the boots should recharge if you're not moving
-		if(hp&&antigrav_charge>0&&countinv("IsMoving")>3){
+		if(hp&&antigrav_charge>0&&(hp.vel.x>1||hp.vel.y>1||hp.vel.z>1)){
 			antigrav_charge--;
 
             //if the boots have a charge, they'll 
@@ -81,25 +81,9 @@ class WornAntiGravBoots:HDDamageHandler{
 
 	override double RestrictSpeed(double speedcap){
 	//this changes how fast a player can move while wearing this
-		return min(speedcap, 2);//default is 1.8
+		return min(speedcap, 3.5);//default is 1.8
 	}
 	 
-/* this is where the radsuit's visor overlay is handled,
-	can be useful for adding certain visual effects
-
-
-	override void DisplayOverlay(hdstatusbar sb,hdplayerpawn hpl){
-		sb.SetSize(0,320,200);
-		sb.BeginHUD(forcescaled:true);
-		sb.fill(
-			color(sb.blurred?(level.time&(1|2|4))<<2:160,10,40,14),
-			0,0,screen.getwidth(),screen.getheight()
-		);
-	}
-*/
-
-	//screw it, going back to the old DrawHUDStuff code,
-	//i'm not dealing with stupid statusbar bullshit
 	override void DrawHudStuff(
 		hdstatusbar sb,
 		hdplayerpawn hpl,
@@ -109,7 +93,7 @@ class WornAntiGravBoots:HDDamageHandler{
 		bool am=hdflags&HDSB_AUTOMAP;
 		sb.drawimage(
 			"AGRVA0",
-			am?(11,137):(84,-5),
+			am?(11,137):(-120,-2),
 			am?sb.DI_TOPLEFT:
 			(sb.DI_SCREEN_CENTER_BOTTOM|sb.DI_ITEM_CENTER_BOTTOM)
 		);
@@ -117,7 +101,7 @@ class WornAntiGravBoots:HDDamageHandler{
         //draws charge amount on boots sprite
 		sb.drawstring(
 			sb.pnewsmallfont,sb.formatnumber(antigrav_charge/5),
-			am?(14,136):(84,-10),
+			am?(14,136):(-128,-10),
 			am?(sb.DI_TOPLEFT|sb.DI_TEXT_ALIGN_RIGHT)
 			:(sb.DI_SCREEN_CENTER_BOTTOM|sb.DI_TEXT_ALIGN_RIGHT),
 			Font.CR_RED,scale:(0.5,0.5)
