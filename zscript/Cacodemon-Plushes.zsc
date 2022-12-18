@@ -1,0 +1,1121 @@
+//-------------------------------------------------
+// Cacodemon Plushes | Squeeze 'em for a surprise!
+//-------------------------------------------------
+
+// ha eediot
+class HDPlushDummy:HDWeapon{
+	default{
+		-hdweapon.fitsinbackpack
+		hdweapon.refid "cdp";
+		tag "$TAG_CacoPlushies";
+		inventory.icon "CCPLA0";
+
+		hdweapon.loadoutcodes "
+			\cuNine - 0/1, 9mm Boss Rifle
+			\cuFour - 0/1, 4mm Boss Rifle
+			\cuHexadoken - 0/1, Hexadoken's Personal Rifle
+			\cuWorst - 0/1, Lightspeed Boss Rifle";
+	}
+	override bool AddSpareWeapon(actor newowner){return AddSpareWeaponRegular(newowner);}
+	override hdweapon GetSpareWeapon(actor newowner,bool reverse,bool doselect){return GetSpareWeaponRegular(newowner,reverse,doselect);}
+	override double weaponbulk(){return 8;}
+	override void PostBeginPlay(){
+		if(!owner) return;
+		GiveWeapon(owner, weaponstatus[0],weaponstatus[1],weaponstatus[2],weaponstatus[3],weaponstatus[4],weaponstatus[5],weaponstatus[6],weaponstatus[7],weaponstatus[8],weaponstatus[9],weaponstatus[10],weaponstatus[11],weaponstatus[12],weaponstatus[13]);
+		let spw=spareweapons(owner.findinventory("spareweapons"));
+			if(spw) {
+				for(int i=0;i<spw.weapontype.size();i++)
+					if(spw.weapontype[i]=="HDPlushDummy"){
+						GiveWeapon(owner, spw.GetWeaponValue(i,0), spw.GetWeaponValue(i,1), spw.GetWeaponValue(i,2),
+							spw.GetWeaponValue(i,3), spw.GetWeaponValue(i,4), spw.GetWeaponValue(i,5),
+							spw.GetWeaponValue(i,6), spw.GetWeaponValue(i,7), spw.GetWeaponValue(i,8),
+							spw.GetWeaponValue(i,9), spw.GetWeaponValue(i,10), spw.GetWeaponValue(i,11),
+							spw.GetWeaponValue(i,12), spw.GetWeaponValue(i,13));
+					}
+				for(int i=spw.weapontype.size();i>0;--i)
+					if(spw.weapontype[i-1]=="HDPlushDummy"){
+						spw.weapontype.Delete(i-1);
+						spw.weaponstatus.Delete(i-1);
+						spw.weaponbulk.Delete(i-1);
+					}
+			}
+		owner.takeinventory("HDPlushDummy", 1);
+	}
+	void GiveWeapon(actor plr, int type){
+		string wn;
+		switch(type) {
+			default:
+			case 0: wn="CacoPlushDoll"; break;
+			case 1: wn="LesbianPrideCacoPlushDoll"; break;
+			case 2: wn="GayPrideCacoPlushDoll"; break;
+			case 3: wn="BisexualCacoPlushDoll"; break;
+            case 4: wn="TransPrideCacoPlushDoll"; break;
+            case 5: wn="AcePrideCacoPlushDoll"; break;
+            case 6: wn="AroCacoPlushDoll"; break;
+            case 7: wn="AgenderPrideCacoPlushDoll"; break;
+            case 8: wn="EnbyPrideCacoPlushDoll"; break;
+            case 9: wn="PanPrideCacoPlushDoll"; break;
+            case 10: wn="UkraineCacoPlushDoll"; break;
+            case 11: wn="TwoEyedCacoPlushDoll"; break;
+            case 12: wn="RenegadeCacoPlushDoll"; break;
+            case 13: wn="FeloniousBolus"; break;
+		}
+	}
+	override void loadoutconfigure(string input){
+		int nine=getloadoutvar(input,"nine",1);
+		int four=getloadoutvar(input,"four",1);
+		int gold=getloadoutvar(input,"worst",1);
+		int pink=getloadoutvar(input,"hexadoken",1);
+		
+		if(gold>0 && nine<0 && four<0 && pink<0) weaponstatus[0]=2;
+		else if (pink>0 && nine<0 && four<0 && gold<0) weaponstatus[0]=3;
+		else if (four>0 && nine<0 && gold<0 && pink<0) weaponstatus[0]=1;
+		else if (nine>0 && four<0 && gold<0 && pink<0) weaponstatus[0]=0;
+		else weaponstatus[0]=random(0,13);
+	}
+}
+
+// The Original.
+class CacoPlushDoll:HDWeapon{
+	default{
+		-hdweapon.droptranslation
+        +hdweapon.fitsinbackpack
+    
+        +ALLOWBOUNCEONACTORS
+        +BOUNCEONACTORS
+        -BOUNCEAUTOOFF
+
+        weapon.slotnumber 7;
+		weapon.slotpriority 9;
+        inventory.pickupsound "plush/squeak";
+		inventory.pickupmessage "Picked up a cacodemon plushie.";
+		inventory.icon "CCPLA0";
+        bouncefactor 2.;
+		scale 0.6;
+		tag "Cacodemon Plushie";
+		hdweapon.refid "cdp";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "CCPLA0",1.;
+	}
+
+override double weaponbulk(){
+		return 8;
+	}
+
+override string gethelptext(){
+		return
+		WEPHELP_FIRE.."  Squeeze plushie\n"
+  ..WEPHELP_ALTRELOAD.."  Throw\n";
+	}
+
+//these functions MUST be added to new HDWeapons
+//to support proper weapon stacking
+override bool AddSpareWeapon(actor newowner){
+  return AddSpareWeaponRegular(newowner);
+  }
+override hdweapon GetSpareWeapon(actor newowner, bool reverse, bool doselect){
+  return GetSpareWeaponRegular(newowner,reverse,doselect);
+  }
+
+override void GunBounce(){
+		double wb=weaponbulk();
+		int dmg=int(throwvel*wb*wb*frandom(0.0001,0.0003));
+
+		if(tracer){
+			tracer.damagemobj(self,target,dmg,"Bashing");
+			if(hd_debug)A_Log(tracer.getclassname().." boinked for "..dmg.." damage with thrown "..getclassname());
+		}
+
+		vel*=frandom(0.7,0.8);
+		if(
+			abs(vel.x)<3
+			&&abs(vel.y)<3
+			&&abs(vel.z)<3
+		){
+			bmissile=false;
+			bBOUNCEONWALLS=false;
+			bBOUNCEONFLOORS=false;
+			bALLOWBOUNCEONACTORS=false;
+			bBOUNCEAUTOOFF=false;
+		}
+
+		A_StartSound("plush/squeak",CHAN_BODY,CHANF_OVERLAP,min(0.7,dmg*0.02));
+   A_AlertMonsters(1);
+		setstatelabel("spawn");
+	}
+
+action void A_CacoTaunt(){
+  A_StartSound("plush/squeak",9);
+  let ccp=new("DelayedTaunter");
+		ccp.target=invoker;
+		ccp.timer=18;}
+
+	states{
+	select0:
+		CCPF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		CCPF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		CCPF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   CCPF A 0 A_CacoTaunt();
+
+		CCPF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  CCPF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		CCPL A -1;
+		stop;
+	
+	}
+}
+
+// Agender
+class AgenderPrideCacoPlushDoll:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up an agender pride cacodemon plushie.";
+		inventory.icon "AGPLA0";
+		tag "Agender Pride Cacodemon Plushie";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "AGPLA0",1.;
+	}
+
+	states{
+	select0:
+		AGPF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		AGPF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		AGPF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   AGPF A 0 A_CacoTaunt();
+
+		AGPF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  AGPF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		AGPL A -1;
+		stop;
+	
+	}
+}
+
+// Aromantic
+class AroCacoPlushDoll:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up a aromantic pride cacodemon plushie.";
+		inventory.icon "ARPLA0";
+		tag "Aro Pride Cacodemon Plushie";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "ARPLA0",1.;
+	}
+
+	states{
+	select0:
+		ARPF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		ARPF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		ARPF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   ARPF A 0 A_CacoTaunt();
+
+		ARPF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  ARPF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		ARPL A -1;
+		stop;
+	
+	}
+}
+
+// Asexual
+class AcePrideCacoPlushDoll:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up a asexual pride cacodemon plushie.";
+		inventory.icon "ASPLA0";
+		tag "Ace Pride Cacodemon Plushie";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "ASPLA0",1.;
+	}
+
+	states{
+	select0:
+		ASPF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		ASPF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		ASPF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   ASPF A 0 A_CacoTaunt();
+
+		ASPF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  ASPF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		ASPL A -1;
+		stop;
+	
+	}
+}
+
+// Bisexual
+class BisexualCacoPlushDoll:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up a bisexual pride cacodemon plushie. Bicon!";
+		inventory.icon "BCPLA0";
+		tag "Bi Pride Cacodemon Plushie";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "BCPLA0",1.;
+	}
+
+	states{
+	select0:
+		BCPF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		BCPF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		BCPF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   BCPF A 0 A_CacoTaunt();
+
+		BCPF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  BCPF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		BCPL A -1;
+		stop;
+	
+	}
+}
+
+// Gay
+class GayPrideCacoPlushDoll:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up a gay pride cacodemon plushie. Love is love!";
+		inventory.icon "GCPLA0";
+		tag "Gay Pride Cacodemon Plushie";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "GCPLA0",1.;
+	}
+
+	states{
+	select0:
+		GCPF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		GCPF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		GCPF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   GCPF A 0 A_CacoTaunt();
+
+		GCPF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  GCPF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		GCPL A -1;
+		stop;
+	
+	}
+}
+
+// Lesbian
+class LesbianPrideCacoPlushDoll:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up a lesbian pride cacodemon plushie. Love is love!";
+		inventory.icon "LCPLA0";
+		tag "Lesbian Pride Cacodemon Plushie";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "LCPLA0",1.;
+	}
+
+	states{
+	select0:
+		LCPF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		LCPF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		LCPF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   LCPF A 0 A_CacoTaunt();
+
+		LCPF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  LCPF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		LCPL A -1;
+		stop;
+	
+	}
+}
+
+// Nonbinary
+class EnbyPrideCacoPlushDoll:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up a nonbinary pride cacodemon plushie.";
+		inventory.icon "NBPLA0";
+		tag "Nonbinary Pride Cacodemon Plushie";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "NBPLA0",1.;
+	}
+
+	states{
+	select0:
+		NBPF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		NBPF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		NBPF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   NBPF A 0 A_CacoTaunt();
+
+		NBPF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  NBPF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		NBPL A -1;
+		stop;
+	
+	}
+}
+
+// Pan
+class PanPrideCacoPlushDoll:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up a pansexual pride cacodemon plushie.";
+		inventory.icon "PSPLA0";
+		tag "Pansexual Pride Cacodemon Plushie";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "PSPLA0",1.;
+	}
+
+	states{
+	select0:
+		PSPF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		PSPF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		PSPF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   PSPF A 0 A_CacoTaunt();
+
+		PSPF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  PSPF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		PSPL A -1;
+		stop;
+	
+	}
+}
+
+// Trans
+class TransPrideCacoPlushDoll:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up a trans pridr cacodemon plushie. Trans Rights!";
+		inventory.icon "TCPLA0";
+		tag "Trans Pride Cacodemon Plushie";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "TCPLA0",1.;
+	}
+
+	states{
+	select0:
+		TCPF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		TCPF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		TCPF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   TCPF A 0 A_CacoTaunt();
+
+		TCPF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  TCPF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		TCPL A -1;
+		stop;
+	
+	}
+}
+
+// Felonious..?
+class FeloniousBolus:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up a strange bolus. It has a felonious appearance...";
+   scale 1;
+   bouncefactor 4;
+   inventory.pickupsound "felonious/bolus";
+		inventory.icon "FBOLA0";
+		tag "Felonious Bolus";
+	}
+
+override double weaponbulk(){
+		return 50;
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "FBOLA0",1.;
+	}
+
+override void GunBounce(){
+		double wb=weaponbulk();
+		int dmg=int(throwvel*wb*wb*frandom(0.0001,0.0003));
+
+		if(tracer){
+			tracer.damagemobj(self,target,dmg,"Bashing");
+			if(hd_debug)A_Log(tracer.getclassname().." boinked for "..dmg.." damage with thrown "..getclassname());
+		}
+
+		vel*=frandom(0.7,0.8);
+/*
+		if(
+			abs(vel.x)<3
+			&&abs(vel.y)<3
+			&&abs(vel.z)<3
+		){
+			bmissile=false;
+			bBOUNCEONWALLS=false;
+			bBOUNCEONFLOORS=false;
+			bALLOWBOUNCEONACTORS=false;
+			bBOUNCEAUTOOFF=false;
+		}
+*/
+		A_StartSound("felonious/bolus",CHAN_BODY,CHANF_OVERLAP,min(1,dmg*0.02));
+   A_AlertMonsters(1);
+		setstatelabel("spawn");
+	}
+
+action void A_BolusTaunt(){
+  A_StartSound("felonious/bolus",9);
+  let ccp=new("DelayedTaunter");
+		ccp.target=invoker;
+		ccp.timer=18;}
+
+
+	states{
+	select0:
+		FBOF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		FBOF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		FBOF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   FBOF A 0 A_BolusTaunt();
+
+		FBOF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  FBOF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		FBOL A -1;
+		stop;
+	
+	}
+}
+
+// Clance
+class RenegadeCacoPlushDoll:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up an Renegade cacodemon plushie... Clance, is that you?";
+		inventory.icon "RCPLA0";
+		tag "Renegade Cacodemon Plushie";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "RCPLA0",1.;
+	}
+
+	states{
+	select0:
+		RCPF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		RCPF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		RCPF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   RCPF A 0 A_CacoTaunt();
+
+		RCPF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  RCPF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		RCPL A -1;
+		stop;
+	
+	}
+}
+
+// Duelo Maestro
+class TwoEyedCacoPlushDoll:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up a cacodemon plushie. It has two eyes...";
+		inventory.icon "C2PLA0";
+		tag "Two-eyed Cacodemon Plushie";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "C2PLA0",1.;
+	}
+
+	states{
+	select0:
+		C2PF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		C2PF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		C2PF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   C2PF A 0 A_CacoTaunt();
+
+		C2PF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  C2PF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		C2PL A -1;
+		stop;
+	
+	}
+}
+
+// Ukraine
+class UkraineCacoPlushDoll:CacoPlushDoll{
+	default{
+		inventory.pickupmessage "Picked up a cacodemon plushie. Slava Ukraini!";
+		inventory.icon "UCPLA0";
+		tag "Ukraine Cacodemon Plushie";
+	}
+
+override string,double getpickupsprite(bool usespare){
+		return "UCPLA0",1.;
+	}
+
+	states{
+	select0:
+		UCPF A 0{
+			A_TakeInventory("NulledWeapon");
+			
+		}
+		#### A 0;
+		---- A 1 A_Raise();
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(30);
+		---- A 1 A_Raise(24);
+		---- A 1 A_Raise(18);
+		wait;
+
+	deselect0:
+		UCPF A 0;
+		---- AAA 1 A_Lower();
+		---- A 1 A_Lower(18);
+		---- A 1 A_Lower(24);
+		---- A 1 A_Lower(30);
+		wait;
+
+	ready:
+		UCPF A 0;
+		#### A 1 A_WeaponReady(WRF_ALL);
+		goto readyend;
+
+  fire:
+   UCPF A 0 A_CacoTaunt();
+
+		UCPF BCCBA 2;
+  goto nope;
+
+//throw code borrowed from Potetobloke Weapons Pack,
+//specifically the PS-451 single-use plasma gun
+altreload:
+  YEET:
+  UCPF A 1;
+		---- A 1
+		{
+		if(player&&hdweapon(player.readyweapon)){
+		 player.cmd.buttons|=BT_ZOOM;
+		 DropInventory(player.readyweapon);
+		}
+		}
+		TNT1 A 0;
+  goto nope;
+
+	spawn:
+		UCPL A -1;
+		stop;
+	
+	}
+}

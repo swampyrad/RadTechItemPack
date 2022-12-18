@@ -1,0 +1,645 @@
+//-------------------------------------------------
+// Leather Armour (a thick, padded biker jacket)
+//-------------------------------------------------
+const LEATHERARMOUR=50;
+const ENC_LEATHERARMOUR=160;
+const STRIP_JACKET=1500;
+
+// hey buddy, i think you got the wrong door, the leather club's 2 blocks down - [ted]
+class HDLeatherArmour:HDMagAmmo{
+	default{
+		+inventory.invbar
+		+hdpickup.cheatnogive
+		+hdpickup.notinpockets
+		+inventory.isarmor
+		inventory.amount 1;
+		hdmagammo.maxperunit LEATHERARMOUR;
+		hdmagammo.magbulk ENC_LEATHERARMOUR;
+		tag "leather jacket";
+		inventory.icon "JAKTA0";
+		inventory.pickupmessage "Picked up a leather jacket.";
+	}
+	
+	//bool mega;
+	int cooldown;
+	override bool isused(){return true;}
+	override int getsbarnum(int flags){
+		int ms=mags.size()-1;
+		if(ms<0)return -1000000;
+		return mags[ms]%1000;
+	}
+	
+	override string pickupmessage(){
+		return "Picked up a leather jacket!";
+	}
+
+	//because it can intentionally go over the maxperunit amount
+	override void AddAMag(int addamt){
+		if(addamt<0)addamt=LeatherArmour;
+		mags.push(addamt);
+		amount=mags.size();
+	}
+	//keep types the same when maxing
+	override void MaxCheat(){
+		syncamount();
+		for(int i=0;i<amount;i++){
+			mags[i]=LeatherArmour;
+		}
+	}
+
+	action void A_WearJacket(){
+		bool helptext=HDWeapon.CheckDoHelpText(self);
+		invoker.syncamount();
+		int dbl=invoker.mags[invoker.mags.size()-1];
+		//if holding use, cycle to next armour
+		if(!!player&&player.cmd.buttons&BT_USE){
+			invoker.mags.insert(0,dbl);
+			invoker.mags.pop();
+			invoker.syncamount();
+			return;
+		}
+
+		invoker.wornlayer=STRIP_JACKET;//can wear a jacket over body armor
+		bool intervening=!HDPlayerPawn.CheckStrip(self,invoker,false);
+		invoker.wornlayer=0;
+
+		if(intervening){
+
+			//check if it's ONLY the armour layer that's in the way
+			invoker.wornlayer=STRIP_JACKET+1;
+			bool notarmour=!HDPlayerPawn.CheckStrip(self,invoker,false);
+			invoker.wornlayer=0;
+
+			if(
+				notarmour
+				||invoker.cooldown>0
+			){
+				HDPlayerPawn.CheckStrip(self,self);
+			}else invoker.cooldown=10;
+			return;
+		}
+
+		//and finally put on the actual armour
+		HDLeatherArmour.JacketChangeEffect(self,50);
+		A_GiveInventory("HDLeatherArmourWorn");
+		let worn=HDLeatherArmourWorn(FindInventory("HDLeatherArmourWorn"));
+
+		worn.durability=dbl;
+		invoker.amount--;
+		invoker.mags.pop();
+
+		if(helptext){
+			string blah=string.format("You put on the %s armour. ","leather");
+			double qual=double(worn.durability)/(LEATHERARMOUR);
+			if(qual<0.1)A_Log(blah.."It's like you're wearing nothing at all.",true);
+			else if(qual<0.3)A_Log(blah.."Both sleeves are gone.",true);
+			else if(qual<0.6)A_Log(blah.."It's missing a sleeve.",true);
+			else if(qual<0.75)A_Log(blah.."There's a few holes in it.",true);
+			else if(qual<0.95)A_Log(blah.."This jacket's scratched up.",true);
+		}
+
+		invoker.syncamount();
+	}
+	
+	override void doeffect(){
+		if(cooldown>0)cooldown--;
+		if(!amount)destroy();
+	}
+
+	override void syncamount(){
+		if(amount<1){destroy();return;}
+		super.syncamount();
+		for(int i=0;i<amount;i++){
+			mags[i]=min(mags[i],LEATHERARMOUR);
+		}
+	}
+
+	override inventory createtossable(int amt){
+		let sct=super.createtossable(amt);
+		return sct;
+	}
+
+	override void beginplay(){
+		super.beginplay();
+		cooldown=0;
+		if(!mags.size())mags.push(LEATHERARMOUR); //not vital, just sets a default
+	}
+
+    override void consolidate(){}
+	override double getbulk(){
+		syncamount();
+		double blk=0;
+		for(int i=0;i<amount;i++){
+			blk+=ENC_LEATHERARMOUR;
+		}
+		return blk;
+	}
+
+	override bool BeforePockets(actor other){
+		//put on the armour right away
+		if(
+			other.player
+			&&other.player.cmd.buttons&BT_USE
+			&&!other.findinventory("HDLeatherArmourWorn")
+		){
+			wornlayer=STRIP_JACKET;
+			bool intervening=!HDPlayerPawn.CheckStrip(other,self,false);
+			wornlayer=0;
+
+			if(intervening)return false;
+
+			HDLeatherArmour.JacketChangeEffect(other,50);
+			let worn=HDLeatherArmourWorn(other.GiveInventoryType("HDLeatherArmourWorn"));
+			int durability=mags[mags.size()-1];
+			worn.durability=durability;
+			destroy();
+			return true;
+		}
+		return false;
+	}
+
+
+	override void actualpickup(actor other,bool silent){
+		cooldown=0;
+		if(!other)return;
+		int durability=mags[mags.size()-1];
+		HDLeatherArmour aaa=HDLeatherArmour(other.findinventory("HDLeatherArmour"));
+
+		if(aaa){
+			double totalbulk=0.5;
+			for(int i=0;i<aaa.mags.size();i++){
+				totalbulk+=0.5;
+			}
+			if(totalbulk*hdmath.getencumbrancemult()>3.)return;
+		}
+		if(!trypickup(other))return;
+		aaa=HDLeatherArmour(other.findinventory("HDLeatherArmour"));
+		aaa.syncamount();
+		aaa.mags.insert(0,durability);
+		aaa.mags.pop();
+		//aaa.checkmega();
+		other.A_StartSound(pickupsound,CHAN_AUTO);
+		HDPickup.LogPickupMessage(other,pickupmessage());
+	}
+	
+	//modified to make removing your jacket faster than
+	//removing an armor vest
+	static void JacketChangeEffect(actor owner,int delay=25){
+		owner.A_StartSound("weapons/pocket",CHAN_BODY);
+		owner.vel.z+=1.;
+		let onr=HDPlayerPawn(owner);
+		if(onr){
+			onr.stunned+=50;
+			onr.striptime=delay;
+			onr.AddBlackout(256,96,128);
+		}else owner.A_SetBlend("00 00 00",1,6,"00 00 00");
+	}
+	states{
+	spawn:
+		JAKT A -1 nodelay{
+			invoker.SyncAmount();
+		}
+	use:
+		TNT1 A 0 A_WearJacket();
+		fail;
+	}
+}
+
+
+class HDLeatherArmourWorn:HDArmourWorn{
+	default{
+		+inventory.isarmor
+		HDArmourworn.ismega false;
+		inventory.maxamount 1;
+		tag "leather jacket";
+		HDDamageHandler.priority 0;
+		HDPickup.overlaypriority 10000;
+		HDPickup.wornlayer STRIP_JACKET;
+	}
+	override void beginplay(){
+		durability=LEATHERARMOUR;
+		super.beginplay();
+		//if(mega)settag("battle armour");
+	}
+
+	override double RestrictSpeed(double speedcap){
+		return min(speedcap,4);//lighter than garrison armour
+	}
+	override double getbulk(){
+		return (ENC_LEATHERARMOUR*0.1);
+	}
+
+	override void DrawHudStuff(
+		hdstatusbar sb,
+		hdplayerpawn hpl,
+		int hdflags,
+		int gzflags
+	){
+		vector2 coords=
+			(hdflags&HDSB_AUTOMAP)?(4,86):
+			(hdflags&HDSB_MUGSHOT)?((sb.hudlevel==1?-85:-55),-11):
+			(0,-sb.mIndexFont.mFont.GetHeight()*2)
+		;
+		string armoursprite="JAKTA0";//front layer
+		string armourback="JAKET0";//back layer
+		sb.drawbar(
+			armoursprite,armourback,
+			durability,LEATHERARMOUR,
+			coords,-1,sb.SHADER_VERT,
+			gzflags
+		);
+		sb.drawstring(
+			sb.pnewsmallfont,sb.FormatNumber(durability),
+			coords+(10,-17),gzflags|sb.DI_ITEM_CENTER|sb.DI_TEXT_ALIGN_RIGHT,
+			Font.CR_DARKGRAY,scale:(0.5,0.5)
+		);
+	}
+
+
+	override inventory CreateTossable(int amt){
+		if(!HDPlayerPawn.CheckStrip(owner,self))return null;
+
+		//armour sometimes crumbles into dust
+		if(durability<random(1,3)){
+			for(int i=0;i<10;i++){
+				actor aaa=spawn("WallChunk",owner.pos+(0,0,owner.height-24),ALLOW_REPLACE);
+				vector3 offspos=(frandom(-12,12),frandom(-12,12),frandom(-16,4));
+				aaa.setorigin(aaa.pos+offspos,false);
+				aaa.vel=owner.vel+offspos*frandom(0.3,0.6);
+				aaa.scale*=frandom(0.8,2.);
+			}
+			destroy();
+			return null;
+		}
+
+		//finally actually take off the armour
+		let tossed=HDLeatherArmour(owner.spawn("HDLeatherArmour",
+			(owner.pos.xy,owner.pos.z+owner.height-20),
+			ALLOW_REPLACE
+		));
+		tossed.mags.clear();
+		tossed.mags.push(durability);
+		tossed.amount=1;
+		HDLeatherArmour.JacketChangeEffect(owner,30);
+		destroy();
+		return tossed;
+	}
+
+
+	states{
+	spawn:
+		TNT1 A 0;
+		stop;
+	}
+	
+	//called from HDPlayerPawn and HDMobBase's DamageMobj
+	override int,name,int,double,int,int,int HandleDamage(
+		int damage,
+		name mod,
+		int flags,
+		actor inflictor,
+		actor source,
+		double towound,
+		int toburn,
+		int tostun,
+		int tobreak
+	){
+		let victim=owner;
+
+		//approximation of "thickness" of armour
+		int alv=1;//same as garrison armor
+
+		if(
+			(flags&DMG_NO_ARMOR)
+			||mod=="staples"
+			||mod=="maxhpdrain"
+			||mod=="internal"
+			||mod=="jointlock"
+			||mod=="falling"
+			||mod=="slime"
+			||mod=="bleedout"
+			||mod=="drowning"
+			||mod=="poison"
+			||mod=="electrical"
+			||durability<random(1,24) //it's just a leather jacket, the hell do you want??
+			||!victim
+		)return damage,mod,flags,towound,toburn,tostun,tobreak;
+
+
+		//which is just a vest not a bubble...
+		if(
+			inflictor
+			&&inflictor.default.bmissile
+		){
+			double impactheight=inflictor.pos.z+inflictor.height*0.5;
+			double shoulderheight=victim.pos.z+victim.height-16;
+			double waistheight=victim.pos.z+victim.height*0.4;
+			double impactangle=absangle(victim.angle,victim.angleto(inflictor));
+			if(impactangle>90)impactangle=180-impactangle;
+			bool shouldhitflesh=(
+				impactheight>shoulderheight
+				||impactheight<waistheight
+				||impactangle>80
+			)?!random(0,5):!random(0,31);
+			if(shouldhitflesh)alv=0;
+			else if(impactangle>80)alv=random(1,alv);
+		}
+
+		//missed the armour entirely
+		if(alv<1)return damage,mod,flags,towound,toburn,tostun,tobreak;
+
+
+		//some numbers
+		int tobash=0;
+		int armourdamage=0;
+
+		int resist=0;
+		if(durability<HDCONST_BATTLEARMOUR){
+			int breakage=HDCONST_BATTLEARMOUR-durability;
+			resist-=random(0,breakage);
+		}
+
+		int originaldamage=damage;
+
+
+		//start treating damage types
+		if(
+			mod=="hot"
+			||mod=="cold"
+		){
+			if(random(0,alv)){
+				damage=max(random(0,1-random(0,alv)),damage-50);//+40% thermal resistance
+				if(!random(0,100-damage))armourdamage+=(damage>>3);//2x more likely to take armour damage
+			}
+		}else if(mod=="piercing"){
+			resist+=20*(alv+1);//-33% piercing resistance
+			if(resist>0){
+				damage-=resist;
+				tobash=min(originaldamage,resist)>>3;
+			}
+			armourdamage=random(0,originaldamage>>2);
+		}else if(mod=="slashing"){
+			resist+=80+25*alv;//-20% slash resistance
+			if(resist>0){
+				damage-=resist;
+				tobash=min(originaldamage,resist)>>2;
+			}
+			armourdamage=random(0,originaldamage>>2);
+		}else if(
+			mod=="teeth"
+			||mod=="claws"
+			||mod=="natural"
+		){
+			resist+=random((alv<<4),80+40*alv);//-20% puncture resistance
+			if(resist>0){
+				damage-=resist;
+				tobash=min(originaldamage,resist)>>3;
+			}
+			armourdamage=random(0,originaldamage>>3);
+		}else if(
+			mod=="balefire"
+		){
+			if(random(0,alv)){
+				towound-=max(1,damage>>2);
+				armourdamage=random(0,damage>>2);
+			}
+		}else if(
+			mod=="bashing"
+			||mod=="melee"
+		){
+			armourdamage=clamp((originaldamage>>3),0,random(0,alv));
+
+			//player punch to head
+			bool headshot=inflictor&&(
+				(
+					inflictor.player
+					&&inflictor.pitch<-3.2
+				)||(
+					HDHumanoid(inflictor)
+					&&damage>50
+				)
+			);
+			if(!headshot){
+				//damage=int(damage*(1.-(alv*0.1)));
+				damage=damage;//literally no head protection
+			}
+		}else{
+			//any other damage not taken care of above
+			resist+=30*alv;//-40% overall resistance
+			if(resist>0){
+				damage-=resist;
+				tobash=min(originaldamage,resist)>>random(0,2);
+			}
+			armourdamage=random(0,originaldamage>>random(1,3));
+		}
+
+
+
+		if(hd_debug)console.printf(owner.gettag().."  took "..originaldamage.." "..mod.." from "..(source?source.gettag():"the world")..((inflictor&&inflictor!=source)?("'s "..inflictor.gettag()):"").."  converted "..tobash.."  final "..damage.."   lost "..armourdamage);
+
+
+		//set up attack position for puff and knockback
+		vector3 puffpos=victim.pos;
+		if(
+			inflictor
+			&&inflictor!=source
+		)puffpos=inflictor.pos;
+		else if(
+			source
+			&&source.pos.xy!=victim.pos.xy
+		)puffpos=(
+			victim.pos.xy+victim.radius*(source.pos.xy-victim.pos.xy).unit()
+			,victim.pos.z+min(victim.height,source.height*0.6)
+		);
+		else puffpos=(victim.pos.xy,victim.pos.z+victim.height*0.6);
+
+		//add some knockback even when target unhurt
+		if(
+			damage<1
+			&&tobash<1
+			&&victim.health>0
+			&&victim.height>victim.radius*1.6
+			&&victim.pos!=puffpos
+		){
+			victim.vel+=(victim.pos-puffpos).unit()*0.01*originaldamage;
+			let hdp=hdplayerpawn(victim);
+			if(
+				hdp
+				&&!hdp.incapacitated
+			){
+				hdp.wepbobrecoil2+=(frandom(-5.,5.),frandom(2.5,4.))*0.01*originaldamage;
+				hdp.playrunning();
+			}else if(random(0,255)<victim.painchance)hdmobbase.forcepain(victim);
+		}
+
+		//armour breaks up visibly
+		if(armourdamage>3){
+			actor ppp=spawn("FragPuff",puffpos);
+			ppp.vel+=victim.vel;
+		}
+		if(armourdamage>random(0,2)){
+			vector3 prnd=(frandom(-1,1),frandom(-1,1),frandom(-1,1));
+			actor ppp=spawn("WallChunk",puffpos+prnd);
+			ppp.vel+=victim.vel+(puffpos-owner.pos).unit()*3+prnd;
+		}
+
+
+		//apply stuff
+		if(tobash>0)victim.damagemobj(
+			inflictor,source,min(tobash,victim.health-1),
+			"bashing",DMG_NO_ARMOR|DMG_THRUSTLESS
+		);
+
+		if(armourdamage>0)durability-=armourdamage;
+		if(durability<1)destroy();
+
+		return damage,mod,flags,towound,toburn,tostun,tobreak;
+	}
+
+	//called from HDBulletActor's OnHitActor
+	override double,double OnBulletImpact(
+		HDBulletActor bullet,
+		double pen,
+		double penshell,
+		double hitangle,
+		double deemedwidth,
+		vector3 hitpos,
+		vector3 vu,
+		bool hitactoristall
+	){
+		let hitactor=owner;
+		if(!owner)return 0,0;
+		let hdp=HDPlayerPawn(hitactor);
+		let hdmb=HDMobBase(hitactor);
+
+		//if standing right over an incap'd victim, bypass armour
+		if(
+			bullet.pitch>80
+			&&(
+				(hdp&&hdp.incapacitated)
+				||(
+					hdmb
+					&&hdmb.frame>=hdmb.downedframe
+					&&hdmb.instatesequence(hdmb.curstate,hdmb.resolvestate("falldown"))
+				)
+			)
+			&&!!bullet.target
+			&&abs(bullet.target.pos.z-bullet.pos.z)<bullet.target.height
+		)return pen,penshell;
+
+		double hitheight=hitactoristall?((hitpos.z-hitactor.pos.z)/hitactor.height):0.5;
+
+		double addpenshell=(10+max(0,((durability-40)>>3)));
+
+		//poorer armour on legs and head
+		//sometimes slip through a gap
+		int crackseed=int(level.time+angle)&(1|2|4|8|16|32);
+		if(hitheight>0.8){
+			addpenshell=-1;
+		}else if(hitheight<0.4){
+			//legs: gaps and thinner (but not that much thinner) material
+			if(crackseed>clamp(durability,1,8))
+				addpenshell*=frandom(frandom(0,0.5),1.);
+		}else if(
+			crackseed>max(durability,8)
+		){
+			//torso: just kinda uneven
+			addpenshell*=frandom(0.4,0.6);
+		}
+
+		int armourdamage=0;
+
+
+		if(addpenshell>0){
+			//degrade and puff
+			double bad=min(pen,addpenshell)*bullet.stamina*0.0005;
+			armourdamage=random(-1,int(bad));
+
+			if(
+				!armourdamage
+				&&bad
+				&&frandom(0,3)<bad
+			)armourdamage=1;
+
+			if(armourdamage>0){
+				actor p=spawn(armourdamage>2?"FragPuff":"WallChunk",bullet.pos,ALLOW_REPLACE);
+				if(p)p.vel=hitactor.vel-vu*2+(frandom(-1,1),frandom(-1,1),frandom(-1,3));
+			}else if(pen>addpenshell)armourdamage=1;
+		}else if(addpenshell>-0.5){
+			//bullet leaves a hole in the webbing
+			armourdamage+=max(random(0,1),(bullet.stamina>>7));
+		}
+		else if(hd_debug)console.printf("missed the armour!");
+
+		if(hd_debug)console.printf(hitactor.getclassname().."  armour resistance:  "..addpenshell);
+		penshell+=addpenshell;
+
+
+		//add some knockback even when target unhurt
+		if(
+			pen>2
+			&&penshell>pen
+			&&hitactor.health>0
+			&&hitactoristall
+		){
+			hitactor.vel+=vu*0.001*hitheight*mass;
+			if(
+				hdp
+				&&!hdp.incapacitated
+			){
+				hdp.wepbobrecoil2+=(frandom(-5.,5.),frandom(2.5,4.))*0.01*hitheight*mass;
+				hdp.playrunning();
+			}else if(random(0,255)<hitactor.painchance) hdmobbase.forcepain(hitactor);
+		}
+
+
+		if(armourdamage>0)durability-=armourdamage;
+		if(durability<1)destroy();
+
+		return pen,penshell;
+	}
+
+}
+
+class JacketArmour:HDPickupGiver{
+	default{
+		//$Category "Items/Hideous Destructor"
+		//$Title "Leather Jacket"
+		//$Sprite "JAKTA0"
+		//+missilemore
+		+hdpickup.fitsinbackpack
+		+inventory.isarmor
+		inventory.icon "JAKTA0";
+		hdpickupgiver.pickuptogive "HDLeatherArmour";
+		hdpickup.bulk ENC_LEATHERARMOUR;
+		hdpickup.refid "arl";
+		tag "leather jacket (spare)";
+		inventory.pickupmessage "Picked up a leather jacket.";
+	}
+	override void configureactualpickup(){
+		let aaa=HDLeatherArmour(actualitem);
+		aaa.mags.clear();
+		aaa.mags.push(LEATHERARMOUR);
+		aaa.syncamount();
+	}
+}
+
+class JacketArmourWorn:HDPickup{
+	default{
+		//+missilemore
+		-hdpickup.fitsinbackpack
+		+inventory.isarmor
+		hdpickup.refid "awl";
+		tag "leather jacket";
+		inventory.maxamount 1;
+	}
+	override void postbeginplay(){
+		super.postbeginplay();
+		if(owner){
+			owner.A_GiveInventory("HDLeatherArmourWorn");
+			let ga=HDLeatherArmourWorn(owner.findinventory("HDLeatherArmourWorn"));
+			ga.durability=(LEATHERARMOUR);
+		}
+		destroy();
+	}
+}
