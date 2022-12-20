@@ -4,7 +4,7 @@
 
 enum GauzeNums{
     GAUZE_GIVEWRAP = 1,//uses this much per bandage attempt
-    GAUZE_MAXWRAP = 20,//20 uses from each me
+    GAUZE_MAXWRAP = 20,//20 uses from each medic kit
     
     MEDS_GAUZE = 1,
 }
@@ -65,6 +65,41 @@ class HDFieldMedicKit:HDWoundFixer{
 				if(owner.player)owner.player.setpsprite(PSP_WEAPON,findstate("nope"));
 			}
 		}
+
+	}
+	
+	void patchwound(actor itg){
+		//code borrowed fron Second Flesh Applicator
+			let gauze=weaponstatus[MEDS_GAUZE];
+			if (gauze<1)return;
+			
+			if(itg){
+				let tgw=targetwound;
+				if(
+					!tgw
+					||tgw.bleeder!=itg
+				){
+					tgw=hdbleedingwound.findbiggest(itg,HDBW_FINDPATCHED);
+					targetwound=tgw;
+				}
+				if(
+					tgw
+					&&!tgw.depth
+					&&!tgw.patched
+				){
+					targetwound=null;
+					A_WeaponMessage("Wound stabilized.",40);
+					//setweaponstate("patchdone");
+					return;
+				}
+				if(
+					tgw
+					&&tgw.patch(frandom(0.2,0.3),true) 
+				){
+					tgw.depth+=tgw.patched;
+					tgw.patched=0;
+				}
+			}
 	}
 	
 	override string,double getpickupsprite(){
@@ -120,10 +155,9 @@ class HDFieldMedicKit:HDWoundFixer{
 		TNT1 A 0 A_Refire("lower");
 		goto nope;
 	nogauze:
-		TNT1 A 1{
+		TNT1 A 0{
 			if(DoHelpText())A_WeaponMessage("You are out of gauze.",70);
 		}
-		TNT1 A 0 A_Refire("lower");
 		goto nope;
 	fire:
 		TNT1 A 0{
@@ -143,8 +177,8 @@ class HDFieldMedicKit:HDWoundFixer{
 	hold:
 	lower:
 		TNT1 A 0 A_JumpIf(pitch>45,"try");
-		TNT1 A 1 A_MuzzleClimb(0,6);
 		TNT1 A 0 A_JumpIf(invoker.weaponstatus[MEDS_GAUZE]<1,"nogauze");
+		TNT1 A 1 A_MuzzleClimb(0,6);
 		TNT1 A 0 A_JumpIf(IsMoving.Count(self)>=4,"abort");
 		TNT1 A 0 A_Refire("lower");
 		goto ready;
@@ -172,21 +206,6 @@ class HDFieldMedicKit:HDWoundFixer{
 		TNT1 A 0 A_StartSound("bandage/rip",CHAN_WEAPON,CHANF_OVERLAP,0.4);
 		TNT1 A 0 A_Refire("try4");
 		goto ready;
-		
-		/*
-	try3:
-		TNT1 A random(20,40){
-			A_MuzzleClimb(frandom(-1.6,1.8),frandom(-2.4,2.4));
-			if(hdplayerpawn(self))hdplayerpawn(self).fatigue+=2;
-		}
-		TNT1 A 0 A_Jump(200,2);
-		TNT1 A 0 A_StartSound("bandage/rustle",CHAN_BODY,CHANF_OVERLAP);
-		TNT1 A random(10,20);
-		TNT1 A 0 A_JumpIf(IsMoving.Count(self)>=4,"abort");
-		TNT1 A 0 A_Refire("try4");
-		goto ready;
-		*/
-		//less tries means faster bandaging
 		
 	try3:
 	    TNT1 A 0 A_JumpIf(invoker.weaponstatus[MEDS_GAUZE]<1,"nogauze");
@@ -223,39 +242,9 @@ class HDFieldMedicKit:HDWoundFixer{
 		TNT1 A 0 A_Jump(42,2);
 		TNT1 A 0 A_JumpIf(HDWoundFixer.CheckCovered(self,CHECKCOV_CHECKBODY),2);
 		TNT1 A 4 A_Jump(100,2,3);
-		TNT1 A 0 {invoker.bandagewound(frandom(2,6),self);invoker.weaponstatus[MEDS_GAUZE]--;}//covers wounds 2x better than rags
-		//remove bandage "ammo" only once it treats a wound
-		TNT1 A 0{//code borrowed fron Second Flesh Applicator
-			let itg=invoker.target;
-			if(itg){
-				let tgw=invoker.targetwound;
-				if(
-					!tgw
-					||tgw.bleeder!=itg
-				){
-					tgw=hdbleedingwound.findbiggest(itg,HDBW_FINDPATCHED);
-					invoker.targetwound=tgw;
-				}
-				if(
-					tgw
-					&&!tgw.depth
-					&&!tgw.patched
-				){
-					invoker.targetwound=null;
-					//A_WeaponMessage("Wound successfully sealed.",70);
-					//setweaponstate("patchdone");
-					return;
-				}
-				if(
-					tgw
-					&&tgw.patch(frandom(0.2,0.3),true) 
-					//mild second flesh effect, wounds slowly heal 
-					//as bandages are applied, simulating blood clotting
-				){
-					tgw.depth+=tgw.patched;
-					tgw.patched=0;
-				}
-			}
+		TNT1 A 0 {invoker.bandagewound(frandom(2,6),self);//covers wounds 2x better than rags
+	              invoker.patchwound(self);//each dressing helps speed up closing of wounds
+		          invoker.weaponstatus[MEDS_GAUZE]--;//remove bandage "ammo" after applying a dressing
 		}
 		TNT1 A 0 A_MuzzleClimb(frandom(-2.4,2.4),frandom(-2.4,2.4));
 		TNT1 A 0 A_JumpIf(invoker.weaponstatus[MEDS_GAUZE]<1,"nogauze");
@@ -303,28 +292,11 @@ class HDFieldMedicKit:HDWoundFixer{
 				}
 				invoker.target.A_StartSound("weapons/pocket",CHAN_BODY,CHANF_OVERLAP);
 				invoker.bandagewound(frandom(6,10),invoker.target);//2x better bandaging
+			    invoker.patchwound(invoker.target);//also helps closing of mibor wounds
 			    invoker.weaponstatus[MEDS_GAUZE]--;
 			}
 		}
-		TNT1 A 0{//vorrowed from Second Flesh Applicator
-			let itg=invoker.target;
-			
-			//A_StartSound("medikit/staple",CHAN_WEAPON);
-			//invoker.weaponstatus[MEDS_BLOOD]+=random(0,1);
-
-			itg.A_StartSound("misc/smallslop",CHAN_BODY,CHANF_OVERLAP);
-		//	if(!random(0,3))invoker.setstatelabel("patchupend");
-			itg.givebody(1);
-		//	itg.damagemobj(invoker,null,1,"staples",DMG_FORCED);
-
-			if(hdplayerpawn(itg)){
-				HDF.Give(itg,"SecondFlesh",1);
-			}else{
-				if(hdmobbase(itg))hdmobbase(itg).bodydamage-=1;
-				itg.givebody(1);
-			//	hdmobbase.forcepain(itg);
-			}
-		}
+	
 		goto ready;
 
 	altreload:
