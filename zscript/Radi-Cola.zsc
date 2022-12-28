@@ -43,14 +43,14 @@ class SpentRadiCola:HDActor{//code borrowed from HDFragGrenadeRoller
 	}
 	states{
 	spawn:
-		RDCL B 0 A_ChangeVelocity(vel.x*2+frandom(-1,1), vel.y*2+frandom(-1,1), vel.z+3, CVF_REPLACE);
+		RDCL B 0 A_ChangeVelocity(vel.x*3+frandom(-1,1), vel.y*3+frandom(-1,1), vel.z+4, CVF_REPLACE);
 		goto spawn2;
 	spawn2:
-		#### BBB 2{
+		#### B 15{
 			if(abs(vel.z-keeprolling.z)>10)A_StartSound("misc/emptycan",CHAN_BODY);
 			else if(floorz>=pos.z)A_StartSound("misc/emptycan");
 			keeprolling=vel;
-			if(abs(vel.x)<0.4 && abs(vel.y)<0.4) setstatelabel("death");
+			if(abs(vel.x)<0.5 && abs(vel.y)<0.5) setstatelabel("death");
 		}loop;
 	bounce:
 		---- B 0{
@@ -58,12 +58,12 @@ class SpentRadiCola:HDActor{//code borrowed from HDFragGrenadeRoller
 			vel*=0.9;
 		}goto spawn2;
 	death:
-		---- B 2{
-			if(abs(vel.z-keeprolling.z)>3){
+		---- B 5{
+			if(abs(vel.z-keeprolling.z)>2){
 				A_StartSound("misc/emptycan",CHAN_BODY);
 				keeprolling=vel;
 			}
-			if(abs(vel.x)>0.4 || abs(vel.y)>0.4) setstatelabel("spawn");
+			if(abs(vel.x)>0.5 || abs(vel.y)>0.5) setstatelabel("spawn");
 		}wait;
 	}
 }
