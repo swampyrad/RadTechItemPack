@@ -167,20 +167,3 @@ class WildHalfPack:IdleDummy{
 		destroy();
 	}
 }
-
-class HalfPack_Spawner : EventHandler
-{
-
-override void CheckReplacement(ReplaceEvent HalfPack) {
-	switch (HalfPack.Replacee.GetClassName()) {
-
-  case 'WildBackpack' 	:   if (!random(0,9))HalfPack.Replacement = "WildHalfPack";
-                            break;
-
-		}
-
-	HalfPack.IsFinal = false;
-	}
-}
-
-
