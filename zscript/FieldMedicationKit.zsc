@@ -15,6 +15,9 @@ class HDFieldMedicKit:HDWoundFixer{
 	    +weapon.no_auto_switch
 		+hdweapon.fitsinbackpack
 		
+		-weapon.cheatnotweapon
+		//adding this made it backpackable
+		
 		+inventory.invbar
 		-nointeraction
 		+inventory.ishealth
