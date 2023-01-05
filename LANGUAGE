@@ -11,8 +11,22 @@ TAG_HALFPACK = "Half-Pack";
 TAG_RADBOOTS = "Anti-Radiation Boots";
 TAG_GRAVBOOTS = "Anti-Gravity Boots";
 TAG_JACKET = "Leather Armour";
+TAG_RADIRADIO = "UAC Pocket Radio";
 
+// Pickup messages
+PICKUP_RADICOLA = "Picked up a can of Radi-Cola.";
+PICKUP_HALFPACK = "Picked up a Half-Pack.";
+PICKUP_RADBOOTS = "You got the Anti-Radiation Boots!";
+PICKUP_GRAVBOOTS = "You got the Anti-Gravity Boots!";
+PICKUP_JACKET = "Picked up a leather jacket.";
+PICKUP_FIRSTAIDSPRAY_FULL = "Picked up a can of First Aid Spray.";
+PICKUP_FIRSTAIDSPRAY_USED = "Picked up a used can of First Aid Spray. ";
+PICKUP_FIRSTAIDSPRAY_EMPTY = "Picked up an empty can of First Aid Spray.";
+PICKUP_FIELDMEDICKIT_FULL = "Picked up a sealed Field Medic Kit";
+PICKUP_FIELDMEDICKIT_USED = "Picked up a opened Field Medic Kit";
+PICKUP_FIELDMEDICKIT_EMPTY = "Picked up an empty Field Medic Kit";
 
+PICKUP_RADIRADIO = "Picked up a UAC Pocket Radio. Rock some tunes!"
 
 // EVERYTHING below this is Menu stuff. Feast upon the horror. - [Ted]
 
