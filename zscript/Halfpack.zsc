@@ -5,6 +5,11 @@
 //const HDCONST_BPMAX=1000;
 
 class HDHalfPack : HDBackpack{
+    override string PickupMessage() {
+	    String pickupmessage = Stringtable.Localize("$PICKUP_HALFPACK"); 
+	    return pickupmessage;
+	}
+
 	override string, double GetPickupSprite() { return "HPAKA0", 1.0; }
     override double WeaponBulk() { return max((Storage ? Storage.TotalBulk * 0.70 : 0), 50); }
 

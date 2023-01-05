@@ -7,7 +7,6 @@ int channel;
 	default{
 		-hdweapon.droptranslation
 		
-		inventory.pickupmessage "Picked up a pocket radio.";
 		inventory.icon "RDIOA0";
         weapon.selectionorder 101;
 		weapon.slotnumber 8;
@@ -17,15 +16,21 @@ int channel;
 		hdweapon.refid "prd";
 	}
 
-override double weaponbulk(){
+    override string PickupMessage() {
+	    String pickupmessage = Stringtable.Localize("$PICKUP_RADIRADIO"); 
+	    return pickupmessage;
+	}
+
+
+    override double weaponbulk(){
 		return 10;
 	}
 
-override string,double getpickupsprite(bool usespare){
+    override string,double getpickupsprite(bool usespare){
 		return "RDIOA0",0.6;
 	}
 
-override string gethelptext(){
+    override string gethelptext(){
 		return
 		WEPHELP_FIRE.."  Switch to next channel\n"
    ..WEPHELP_ALTFIRE.."  Switch to previous channel\n\n"

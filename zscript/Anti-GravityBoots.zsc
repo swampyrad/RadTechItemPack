@@ -134,6 +134,11 @@ class AntiGravBoots:HDPickup{
 		tag "anti-gravity boots";
 		hdpickup.refid HDLD_ANTIGRAVBOOTS;
 	}
+	
+	override string PickupMessage() {
+	    String pickupmessage = Stringtable.Localize("$PICKUP_ANTIGRAVBOOTS"); 
+	    return pickupmessage;
+	}
 
 	override void DetachFromOwner(){
 		owner.A_TakeInventory("AntiGravBoots");

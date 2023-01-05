@@ -54,6 +54,17 @@ class HDFirstAidSpray :HDWoundFixer{
 		hdweapon.wornlayer 0;
 	}
 
+    override string PickupMessage() {
+	    String pickupmessage = Stringtable.Localize("$PICKUP_FIRSTAIDSPRAY_FULL"); 
+	   
+	    if(!weaponstatus[MEDSPRAY_SECONDFLESH]>0)
+	        pickupmessage = Stringtable.Localize("$PICKUP_FIRSTAIDSPRAY_EMPTY"); 
+		
+		if(weaponstatus[MEDSPRAY_SECONDFLESH]<FIRSTAID_MAXFLESH)
+		    pickupmessage = Stringtable.Localize("$PICKUP_FIRSTAIDSPRAY_USED"); 
+	    
+	    return pickupmessage;}
+
 	override void initializewepstats(bool idfa){
 		weaponstatus[MEDSPRAY_SECONDFLESH] = FIRSTAID_MAXFLESH;
 		weaponstatus[MEDSPRAY_USEDON]=-1;
@@ -484,12 +495,5 @@ class HDFirstAidSpray :HDWoundFixer{
 		FAID A -1 A_JumpIf(!invoker.weaponstatus[MEDSPRAY_SECONDFLESH]>0,1);
 		FAID C -1;
 		wait;
-	}
-
-	override string pickupmessage(){
-		if(!weaponstatus[MEDSPRAY_SECONDFLESH]>0)return "Picked up an empty can of first aid spray.";
-		if(weaponstatus[MEDSPRAY_SECONDFLESH]<FIRSTAID_MAXFLESH)return "Picked up a used can of first aid spray.";
-		
-		return "Picked up a can of first aid spray.";
 	}
 }

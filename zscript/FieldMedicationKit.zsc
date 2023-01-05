@@ -35,11 +35,16 @@ class HDFieldMedicKit:HDWoundFixer{
 		weaponstatus[MEDS_GAUZE]=GAUZE_MAXWRAP;
 	}
 	
-	override string pickupmessage(){
-		if(!weaponstatus[MEDS_GAUZE]>0)return "Picked up an empty field medic kit.";
-		if(weaponstatus[MEDS_GAUZE]<GAUZE_MAXWRAP)return "Picked up a used field medic kit.";
-		
-		return "Picked up a field medic kit.";
+	override string PickupMessage() {
+	    String pickupmessage = Stringtable.Localize("$PICKUP_FIELDMEDICKIT_FULL"); 
+	    
+	    if(!weaponstatus[MEDS_GAUZE]>0) 
+	        pickupmessage = Stringtable.Localize("$PICKUP_FIELDMEDICKIT_EMPTY"); 
+	   
+		if(weaponstatus[MEDS_GAUZE]<GAUZE_MAXWRAP) 
+		    pickupmessage = Stringtable.Localize("$PICKUP_FIELDMEDICKIT_USED"); 
+	    
+	    return pickupmessage;
 	}
 
 	override double weaponbulk(){

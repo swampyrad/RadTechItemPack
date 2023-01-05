@@ -17,8 +17,13 @@ class HDLeatherArmour:HDMagAmmo{
 		hdmagammo.magbulk ENC_LEATHERARMOUR;
 		tag "leather jacket";
 		inventory.icon "JAKTA0";
-		inventory.pickupmessage "Picked up a leather jacket.";
 	}
+	
+	override string PickupMessage() {
+	    String pickupmessage = Stringtable.Localize("$PICKUP_JACKET"); 
+	    return pickupmessage;
+	}
+
 	
 	//bool mega;
 	int cooldown;
@@ -29,10 +34,6 @@ class HDLeatherArmour:HDMagAmmo{
 		return mags[ms]%1000;
 	}
 	
-	override string pickupmessage(){
-		return "Picked up a leather jacket!";
-	}
-
 	//because it can intentionally go over the maxperunit amount
 	override void AddAMag(int addamt){
 		if(addamt<0)addamt=LeatherArmour;

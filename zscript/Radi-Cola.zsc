@@ -15,6 +15,11 @@ class HDRadiCola:PortableStimpack{
 		+inventory.ishealth
 		hdinjectormaker.injectortype "HDRadiColaDrinker";
 	}
+	
+	override string PickupMessage() {
+	    String pickupmessage = Stringtable.Localize("$PICKUP_RADICOLA"); 
+	    return pickupmessage;}
+	
 	states{
 	spawn:
 		RDCL A -1;

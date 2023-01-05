@@ -124,13 +124,18 @@ class ProtectiveRadBoots:HDPickup{
 		//$Title "anti-radiation boots"
 		//$Sprite "RDBTA0"
 
-		inventory.pickupmessage "You got the anti-radiation boots!";
 		inventory.pickupsound "weapons/pocket";
 		inventory.icon "RDBTA0";
 		hdpickup.bulk ENC_RADBOOTS;
 		tag "anti-radiation boots";
 		hdpickup.refid HDLD_RADBOOTS;
 	}
+	
+	override string PickupMessage() {
+	    String pickupmessage = Stringtable.Localize("$PICKUP_ANTIRADBOOTS"); 
+	    return pickupmessage;
+	}
+
 
 	override void DetachFromOwner(){
 		owner.A_TakeInventory("ProtectiveRadBoots");
