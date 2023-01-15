@@ -7,28 +7,8 @@ enum MediSprayNums{
 	MEDSPRAY_USEDON=2,
 	MEDSPRAY_ACCURACY=3,
 	MEDSPRAY_BLOOD=4,
-
-/*
-	CHECKCOV_ONLYFULL=1,
-	CHECKCOV_CHECKBODY=2,
-	CHECKCOV_CHECKFACE=4,
-*/
 }
 
-class FirstAid_Spawner : EventHandler
-{
-override void CheckReplacement(ReplaceEvent e) {
-	switch (e.Replacee.GetClassName()) {
-
-  	case 'BlueFrag' 			: if (!random(0, 19)) {e.Replacement = "HDFirstAidSpray";} break;
-  	case 'HelmFrag' 			: if (!random(0, 19)) {e.Replacement = "HDFirstAidSpray";} break;
-  	case 'Stimpack' 			: if (!random(0, 19)) {e.Replacement = "HDFirstAidSpray";} break;
-
-		}
-
-	e.IsFinal = false;
-	}
-}
 
 class HDFirstAidSpray :HDWoundFixer{
 	override bool AddSpareWeapon(actor newowner){return AddSpareWeaponRegular(newowner);}

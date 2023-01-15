@@ -1,7 +1,7 @@
 [enu default]
 
 // The Main Menu text along with its icon.
-RADTECHITEMS_MENU = "\c[Green]Ⓡ\c- Radtech Items Pack";
+RADTECHITEMS_MENU = "\c[Gold]Ⓡ\c- Radtech Items Pack";
 
 // Item Tags, this shows in the loadout menu and if you hold 'Zoom' over an item with your fists out. Probably other places too. - [Ted]
 TAG_FIELDMEDICKIT = "Field Medical Kit";

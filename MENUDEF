@@ -35,6 +35,11 @@ AddOptionMenu "OptionsMenu"
     Submenu "$RADTECHITEMS_MENU", "RadTechItemPack"
 }
 
+AddOptionMenu "HDAddonMenu"
+{
+    Submenu "$RADTECHITEMS_MENU", "RadTechItemPack"
+}
+
 OptionMenu LeatherArmour
 {
     Title "$MENU_TITLEJACKET"
