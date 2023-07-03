@@ -86,6 +86,12 @@ class RTIPHandler : EventHandler
 		"HDLadderSection"
 	};
 
+	// List of CVARs for Backpack Spawns
+	array<Class <Inventory> > backpackBlacklist;
+
+    // Cache of Ammo Box Loot Table
+    private HDAmBoxList ammoBoxList;
+
 	// List of weapon-ammo associations.
 	// Used for ammo-use association on ammo spawn (happens very often). 
 	array<RTIPSpawnAmmo> ammoSpawnList;
@@ -150,6 +156,20 @@ class RTIPHandler : EventHandler
 	void init()
 	{
 		cvarsAvailable = true;
+
+		//-----------------
+		// Backpack Spawns
+		//-----------------
+
+		if (!fieldmedic_allowBackpacks)    backpackBlacklist.push((Class<Inventory>)("HDFieldMedicKit"));
+		if (!firstaidspray_allowBackpacks) backpackBlacklist.push((Class<Inventory>)("HDFirstAidSpray"));
+		if (!radicola_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)("HDRadiCola"));
+		if (!gravboots_allowBackpacks)     backpackBlacklist.push((Class<Inventory>)("AntiGravBoots"));
+		if (!radboots_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)("ProtectiveRadBoots"));
+		if (!jacketarmour_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)("HDLeatherArmour"));
+		if (!jacketarmour_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)("JacketArmour"));
+		if (!halfpack_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)("HDHalfPack"));
+
 
 		// --------------------
 		// Item Spawns
@@ -220,7 +240,7 @@ class RTIPHandler : EventHandler
 		{
 			if (Actor.Spawn(spawnName, thing.pos) && rep)
 			{
-				if (hd_debug) console.printf(thing.GetClassName().." -> "..spawnName);
+				if (hd_debug) console.printf(thing.getClassName().." -> "..spawnName);
 				
 				thing.destroy();
 
@@ -231,11 +251,20 @@ class RTIPHandler : EventHandler
 		return false;
 	}
 	
-	override void worldThingSpawned(WorldEvent e)
+	override void worldLoaded(WorldEvent e)
 	{
 		// Populates the main arrays if they haven't been already. 
 		if (!cvarsAvailable) init();
 
+        foreach (bl : backpackBlacklist) {
+			if (hd_debug) console.printf("Removing "..bl.getClassName().." from Backpack Spawn Pool");
+                
+			BPSpawnPool.removeItem(bl);
+        }
+	}
+
+	override void worldThingSpawned(WorldEvent e)
+	{
 		// If thing spawned doesn't exist, quit
 		if (!e.thing) return;
 
@@ -251,10 +280,37 @@ class RTIPHandler : EventHandler
 		// If the thing spawned is an ammunition, add any and all items that can use this.
 		if (ammo) handleAmmoUses(ammo, candidateName);
 
+		//Do this AFTER pushing ItemsThatUseThis()
+		//or ammo purging gets messed up lol
+		
 		// Return if range before replacing things.
         if (level.MapName ~== "RANGE") return;
 		
+		if (e.thing is 'HDAmBox') {
+			handleAmmoBoxLootTable();
+		} else {
 		handleWeaponReplacements(e.thing, ammo, candidateName);
+		}
+	}
+
+	private void handleAmmoBoxLootTable()
+	{
+        if (!ammoBoxList)
+		{
+            ammoBoxList = HDAmBoxList.Get();
+
+			foreach (bl : backpackBlacklist)
+			{
+				let index = ammoBoxList.invClasses.find(bl.getClassName());
+
+				if (index != ammoBoxList.invClasses.Size())
+				{
+					if (hd_debug) console.printf("Removing "..bl.getClassName().." from Ammo Box Loot Table");
+
+					ammoBoxList.invClasses.Delete(index);
+				}
+			}
+        }
 	}
 
 	private void handleAmmoUses(HDAmmo ammo, string candidateName)
