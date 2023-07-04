@@ -13,16 +13,13 @@ class RTIPSpawnItem play
 	// Whether or not to replace the original item.
 	bool replaceItem;
 
-	string toString() {
-
+	string toString()
+	{
 		let replacements = "[";
-		if (spawnReplaces.size()) {
-			replacements = replacements..spawnReplaces[0].toString();
 
-			foreach (spawnReplace : spawnReplaces) replacements = replacements..", "..spawnReplace.toString();
-		}
+		foreach (spawnReplace : spawnReplaces) replacements = replacements..", "..spawnReplace.toString();
+
 		replacements = replacements.."]";
-
 
 		return String.format("{ spawnName=%s, spawnReplaces=%s, isPersistent=%b, replaceItem=%b }", spawnName, replacements, isPersistent, replaceItem);
 	}
@@ -47,14 +44,12 @@ class RTIPSpawnAmmo play
 	// ID by string for weapons using that ammo.
 	Array<string> weaponNames;
 
-	string toString() {
-
+	string toString()
+	{
 		let weapons = "[";
-		if (weaponNames.size()) {
-			weapons = weapons..weaponNames[0];
 
-			foreach (weaponName : weaponNames) weapons = weapons..", "..weaponName;
-		}
+		foreach (weaponName : weaponNames) weapons = weapons..", "..weaponName;
+
 		weapons = weapons.."]";
 
 		return String.format("{ ammoName=%s, weaponNames=%s }", ammoName, weapons);
@@ -70,20 +65,20 @@ class RTIPHandler : EventHandler
 	// This -should- mean this mod has no performance impact. 
 	static const string blacklist[] =
 	{
-		"HDSmoke",
-		"BloodTrail",
-		"CheckPuff",
-		"WallChunk",
-		"HDBulletPuff",
-		"HDFireballTail",
-		"ReverseImpBallTail",
-		"HDSmokeChunk",
-		"ShieldSpark",
-		"HDFlameRed",
-		"HDMasterBlood",
-		"PlantBit",
-		"HDBulletActor",
-		"HDLadderSection"
+		'HDSmoke',
+		'BloodTrail',
+		'CheckPuff',
+		'WallChunk',
+		'HDBulletPuff',
+		'HDFireballTail',
+		'ReverseImpBallTail',
+		'HDSmokeChunk',
+		'ShieldSpark',
+		'HDFlameRed',
+		'HDMasterBlood',
+		'PlantBit',
+		'HDBulletActor',
+		'HDLadderSection'
 	};
 
 	// List of CVARs for Backpack Spawns
@@ -106,10 +101,11 @@ class RTIPHandler : EventHandler
 	void addItem(string name, Array<RTIPSpawnItemEntry> replacees, bool persists, bool rep=true)
 	{
 
-		if (hd_debug) {
-			let msg = "Adding "..(persists ? "Persistent" : "Non-Persistent").." Replacement Entry for "..name..": ["..replacees[0].toString();
+		if (hd_debug)
+		{
+			let msg = "Adding "..(persists ? "Persistent" : "Non-Persistent").." Replacement Entry for "..name..": [";
 
-			if (replacees.size() > 1) foreach (replacee : replacees) msg = msg..", "..replacee.toString();
+			foreach (replacee : replacees) msg = msg..", "..replacee.toString();
 
 			console.printf(msg.."]");
 		}
@@ -121,8 +117,7 @@ class RTIPHandler : EventHandler
 		spawnee.spawnName = name;
 		spawnee.isPersistent = persists;
 		spawnee.replaceItem = rep;
-
-		foreach (replacee : replacees) spawnee.spawnReplaces.push(replacee);
+		spawnee.spawnReplaces.copy(replacees);
 		
 		// Pushes the finished struct to the array. 
 		itemSpawnList.push(spawnee);
@@ -132,7 +127,7 @@ class RTIPHandler : EventHandler
 	{
 		// Creates a new struct;
 		RTIPSpawnItemEntry spawnee = RTIPSpawnItemEntry(new('RTIPSpawnItemEntry'));
-		spawnee.name = name.makeLower();
+		spawnee.name = name;
 		spawnee.chance = chance;
 		return spawnee;
 	}
@@ -142,10 +137,8 @@ class RTIPHandler : EventHandler
 	{
 		// Creates a new struct;
 		RTIPSpawnAmmo spawnee = RTIPSpawnAmmo(new('RTIPSpawnAmmo'));
-		spawnee.ammoName = name.makeLower();
-		
-		// Populates the struct with relevant information,
-		foreach (weapon : weapons) spawnee.weaponNames.push(weapon.makeLower());
+		spawnee.ammoName = name;
+		spawnee.weaponNames.copy(weapons);
 
 		// Pushes the finished struct to the array. 
 		ammoSpawnList.push(spawnee);
@@ -161,14 +154,14 @@ class RTIPHandler : EventHandler
 		// Backpack Spawns
 		//-----------------
 
-		if (!fieldmedic_allowBackpacks)    backpackBlacklist.push((Class<Inventory>)("HDFieldMedicKit"));
-		if (!firstaidspray_allowBackpacks) backpackBlacklist.push((Class<Inventory>)("HDFirstAidSpray"));
-		if (!radicola_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)("HDRadiCola"));
-		if (!gravboots_allowBackpacks)     backpackBlacklist.push((Class<Inventory>)("AntiGravBoots"));
-		if (!radboots_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)("ProtectiveRadBoots"));
-		if (!jacketarmour_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)("HDLeatherArmour"));
-		if (!jacketarmour_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)("JacketArmour"));
-		if (!halfpack_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)("HDHalfPack"));
+		if (!fieldmedic_allowBackpacks)    backpackBlacklist.push((Class<Inventory>)('HDFieldMedicKit'));
+		if (!firstaidspray_allowBackpacks) backpackBlacklist.push((Class<Inventory>)('HDFirstAidSpray'));
+		if (!radicola_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('HDRadiCola'));
+		if (!gravboots_allowBackpacks)     backpackBlacklist.push((Class<Inventory>)('AntiGravBoots'));
+		if (!radboots_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('ProtectiveRadBoots'));
+		if (!jacketarmour_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)('HDLeatherArmour'));
+		if (!jacketarmour_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)('JacketArmour'));
+		if (!halfpack_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('HDHalfPack'));
 
 
 		// --------------------
@@ -272,7 +265,6 @@ class RTIPHandler : EventHandler
 		foreach (bl : blacklist) if (e.thing is bl) return;
 
 		string candidateName = e.thing.getClassName();
-		candidateName = candidateName.makeLower();
 		
 		// Pointers for specific classes.
 		let ammo = HDAmmo(e.thing);
@@ -284,12 +276,12 @@ class RTIPHandler : EventHandler
 		//or ammo purging gets messed up lol
 		
 		// Return if range before replacing things.
-        if (level.MapName ~== "RANGE") return;
+        if (level.MapName == 'RANGE') return;
 		
 		if (e.thing is 'HDAmBox') {
 			handleAmmoBoxLootTable();
 		} else {
-		handleWeaponReplacements(e.thing, ammo, candidateName);
+			handleItemReplacements(e.thing, ammo, candidateName);
 		}
 	}
 
@@ -315,10 +307,19 @@ class RTIPHandler : EventHandler
 
 	private void handleAmmoUses(HDAmmo ammo, string candidateName)
 	{
-		foreach (ammoSpawn : ammoSpawnList) if (candidateName == ammoSpawn.ammoName) ammo.itemsThatUseThis.copy(ammoSpawn.weaponNames);
+        foreach (ammoSpawn : ammoSpawnList) if (candidateName ~== ammoSpawn.ammoName)
+		{
+            if (hd_debug)
+			{
+                console.printf("Adding the following to the list of items that use "..ammo.getClassName().."");
+                foreach (weapon : ammoSpawn.weaponNames) console.printf("* "..weapon);
+			}
+
+            ammo.itemsThatUseThis.append(ammoSpawn.weaponNames);
+        }
 	}
 
-	private void handleWeaponReplacements(Actor thing, HDAmmo ammo, string candidateName)
+	private void handleItemReplacements(Actor thing, HDAmmo ammo, string candidateName)
 	{
 		// Checks if the level has been loaded more than 1 tic.
 		bool prespawn = !(level.maptime > 1);
@@ -333,7 +334,7 @@ class RTIPHandler : EventHandler
 			{
 				foreach (spawnReplace : itemSpawn.spawnReplaces)
 				{
-					if (spawnReplace.name == candidateName)
+					if (spawnReplace.name ~== candidateName)
 					{
 						if (hd_debug) console.printf("Attempting to replace "..candidateName.." with "..itemSpawn.spawnName.."...");
 
