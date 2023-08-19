@@ -26,7 +26,7 @@ PICKUP_FIELDMEDICKIT_FULL = "Picked up a sealed Field Medic Kit";
 PICKUP_FIELDMEDICKIT_USED = "Picked up a opened Field Medic Kit";
 PICKUP_FIELDMEDICKIT_EMPTY = "Picked up an empty Field Medic Kit";
 
-PICKUP_RADIRADIO = "Picked up a UAC Pocket Radio. Rock some tunes!"
+PICKUP_RADIRADIO = "Picked up a UAC Pocket Radio. Rock some tunes!";
 
 // EVERYTHING below this is Menu stuff. Feast upon the horror. - [Ted]
 
