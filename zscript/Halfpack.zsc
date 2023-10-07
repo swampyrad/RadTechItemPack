@@ -67,7 +67,7 @@ class HDHalfPack : HDBackpack{
 				sb.DrawImage(SelItem.Icons[i], Off, sb.DI_SCREEN_CENTER | sb.DI_ITEM_CENTER, 1.0, (30, 20), (4.0, 4.0));
 			}
 		}
-		else if (SelItem.ItemClass is 'HDMagAmmo' && !(SelItem.ItemClass is 'HDInjectorMaker'))
+		else if (SelItem.ItemClass is 'HDMagAmmo')
 		{
 			for (int i = 1; i < SelItem.Amounts.Size(); ++i)
 			{

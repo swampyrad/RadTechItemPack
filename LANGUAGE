@@ -28,6 +28,16 @@ PICKUP_FIELDMEDICKIT_EMPTY = "Picked up an empty Field Medic Kit";
 
 PICKUP_RADIRADIO = "Picked up a UAC Pocket Radio. Rock some tunes!";
 
+RADICOLA_HELPTEXT = "\cd<<< \cjRADI-COLA \cd>>>\c-\n\nRadi-Cola helps provide a quick\nboost of energy and strength\nfor marines on the go.\n\n\Press altfire to share with a friend.\n\n\cgDO NOT MIX WITH STIMPACKS.\n\cgDRINK RESPONSIBLY.";
+RADICOLA_NONEED = "They don't want any.";
+RADICOLA_NOTHINGTOBEDONE = "Nothing to be done here.\n\nHave a drink? (press fire)";
+RADICOLA_TAKEOFFOTHER = "You'll need them to take off their ";
+RADICOLA_ELLIPSES = "...";
+RADICOLA_OVERDOSEPLAYER = "Run away!!!\n\n%s is trying to overdose you\n\n(and possibly bugger you)...";
+RADICOLA_FIDGETY = "They seem kinda wired already...";
+RADICOLA_STOPSQUIRMING = "Hey, slow down!\n\n%s only wants to\n\ngive you some Radi-Cola...";
+RADICOLA_STAYSTILLOTHER = "You'll need them to stay still...";
+
 // EVERYTHING below this is Menu stuff. Feast upon the horror. - [Ted]
 
 // Persistence
