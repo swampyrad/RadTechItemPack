@@ -212,8 +212,8 @@ class RTIPHandler : EventHandler {
 
         // Leather Armor
         Array<RTIPSpawnItemEntry> spawns_jacketarmour;
-        spawns_jacketarmour.push(additementry('GarrisonArmour', jacketarmour_spawn_bias));
-        spawns_jacketarmour.push(additementry('BattleArmour', jacketarmour_spawn_bias));
+        spawns_jacketarmour.push(additementry('GarrisonArmour', jacketarmour_greenarmour_spawn_bias));
+        spawns_jacketarmour.push(additementry('BattleArmour', jacketarmour_bluearmour_spawn_bias));
         additem('HDLeatherArmour', spawns_jacketarmour, jacketarmour_persistent_spawning);
     }
 
