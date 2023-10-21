@@ -1,141 +1,138 @@
-// Struct for itemspawn information. 
-class RTIPSpawnItem play
-{
-	// ID by string for spawner
-	string spawnName;
-	
-	// ID by string for spawnees
-	Array<RTIPSpawnItemEntry> spawnReplaces;
-	
-	// Whether or not to persistently spawn.
-	bool isPersistent;
+// Struct for itemspawn information.
+class RTIPSpawnItem play {
 
-	// Whether or not to replace the original item.
-	bool replaceItem;
+    // ID by string for spawner
+    string spawnName;
 
-	string toString()
-	{
-		let replacements = "[";
+    // ID by string for spawnees
+    Array<RTIPSpawnItemEntry> spawnReplaces;
 
-		foreach (spawnReplace : spawnReplaces) replacements = replacements..", "..spawnReplace.toString();
+    // Whether or not to persistently spawn.
+    bool isPersistent;
 
-		replacements = replacements.."]";
+    // Whether or not to replace the original item.
+    bool replaceItem;
 
-		return String.format("{ spawnName=%s, spawnReplaces=%s, isPersistent=%b, replaceItem=%b }", spawnName, replacements, isPersistent, replaceItem);
-	}
+    string toString() {
+
+        let replacements = "[";
+
+        foreach (spawnReplace : spawnReplaces) replacements = replacements..", "..spawnReplace.toString();
+
+        replacements = replacements.."]";
+
+        return String.format("{ spawnName=%s, spawnReplaces=%s, isPersistent=%b, replaceItem=%b }", spawnName, replacements, isPersistent, replaceItem);
+    }
 }
 
-class RTIPSpawnItemEntry play
-{
-	string name;
-	int    chance;
+class RTIPSpawnItemEntry play {
 
-	string toString() {
-		return String.format("{ name=%s, chance=%s }", name, chance >= 0 ? "1/"..(chance + 1) : "never");
-	}
+    string name;
+    int    chance;
+
+    string toString() {
+        return String.format("{ name=%s, chance=%s }", name, chance >= 0 ? "1/"..(chance + 1) : "never");
+    }
 }
 
-// Struct for passing useinformation to ammunition. 
-class RTIPSpawnAmmo play
-{
-	// ID by string for the header ammo.
-	string ammoName;
-	
-	// ID by string for weapons using that ammo.
-	Array<string> weaponNames;
+// Struct for passing useinformation to ammunition.
+class RTIPSpawnAmmo play {
 
-	string toString()
-	{
-		let weapons = "[";
+    // ID by string for the header ammo.
+    string ammoName;
 
-		foreach (weaponName : weaponNames) weapons = weapons..", "..weaponName;
+    // ID by string for weapons using that ammo.
+    Array<string> weaponNames;
 
-		weapons = weapons.."]";
+    string toString() {
 
-		return String.format("{ ammoName=%s, weaponNames=%s }", ammoName, weapons);
-	}
+        let weapons = "[";
+
+        foreach (weaponName : weaponNames) weapons = weapons..", "..weaponName;
+
+        weapons = weapons.."]";
+
+        return String.format("{ ammoName=%s, weaponNames=%s }", ammoName, weapons);
+    }
 }
 
 
 
-// One handler to rule them all. 
-class RTIPHandler : EventHandler
-{
-	// List of persistent classes to completely ignore. 
-	// This -should- mean this mod has no performance impact. 
-	static const string blacklist[] =
-	{
-		'HDSmoke',
-		'BloodTrail',
-		'CheckPuff',
-		'WallChunk',
-		'HDBulletPuff',
-		'HDFireballTail',
-		'ReverseImpBallTail',
-		'HDSmokeChunk',
-		'ShieldSpark',
-		'HDFlameRed',
-		'HDMasterBlood',
-		'PlantBit',
-		'HDBulletActor',
-		'HDLadderSection'
-	};
+// One handler to rule them all.
+class RTIPHandler : EventHandler {
+    // List of persistent classes to completely ignore.
+    // This -should- mean this mod has no performance impact.
+    static const string blacklist[] = {
+        'HDSmoke',
+        'BloodTrail',
+        'CheckPuff',
+        'WallChunk',
+        'HDBulletPuff',
+        'HDFireballTail',
+        'ReverseImpBallTail',
+        'HDSmokeChunk',
+        'ShieldSpark',
+        'HDFlameRed',
+        'HDMasterBlood',
+        'PlantBit',
+        'HDBulletActor',
+        'HDLadderSection'
+    };
 
-	// List of CVARs for Backpack Spawns
-	array<Class <Inventory> > backpackBlacklist;
+    // List of CVARs for Backpack Spawns
+    array<Class <Inventory> > backpackBlacklist;
 
     // Cache of Ammo Box Loot Table
     private HDAmBoxList ammoBoxList;
 
-	// List of weapon-ammo associations.
-	// Used for ammo-use association on ammo spawn (happens very often). 
-	array<RTIPSpawnAmmo> ammoSpawnList;
-	
-	// List of item-spawn associations.
-	// used for item-replacement on mapload. 
-	array<RTIPSpawnItem> itemSpawnList;
+    // List of weapon-ammo associations.
+    // Used for ammo-use association on ammo spawn (happens very often).
+    array<RTIPSpawnAmmo> ammoSpawnList;
 
-	bool cvarsAvailable;
-	
-	// appends an entry to itemSpawnList;
-	void addItem(string name, Array<RTIPSpawnItemEntry> replacees, bool persists, bool rep=true)
-	{
-		if (hd_debug)
-		{
-			let msg = "Adding "..(persists ? "Persistent" : "Non-Persistent").." Replacement Entry for "..name..": [";
+    // List of item-spawn associations.
+    // used for item-replacement on mapload.
+    array<RTIPSpawnItem> itemSpawnList;
 
-			foreach (replacee : replacees) msg = msg..", "..replacee.toString();
+    bool cvarsAvailable;
 
-			console.printf(msg.."]");
-		}
+    // appends an entry to itemSpawnList;
+    void addItem(string name, Array<RTIPSpawnItemEntry> replacees, bool persists, bool rep=true) {
 
-		// Creates a new struct;
-		RTIPSpawnItem spawnee = RTIPSpawnItem(new('RTIPSpawnItem'));
-		
-		// Populates the struct with relevant information,
-		spawnee.spawnName = name;
-		spawnee.isPersistent = persists;
-		spawnee.replaceItem = rep;
-		spawnee.spawnReplaces.copy(replacees);
-		
-		// Pushes the finished struct to the array. 
-		itemSpawnList.push(spawnee);
-	}
+        if (hd_debug) {
 
-	RTIPSpawnItemEntry addItemEntry(string name, int chance)
-	{
-		// Creates a new struct;
-		RTIPSpawnItemEntry spawnee = RTIPSpawnItemEntry(new('RTIPSpawnItemEntry'));
-		spawnee.name = name;
-		spawnee.chance = chance;
-		return spawnee;
-	}
+            let msg = "Adding "..(persists ? "Persistent" : "Non-Persistent").." Replacement Entry for "..name..": [";
 
-	// appends an entry to ammoSpawnList;
-	void addAmmo(string name, Array<string> weapons)
-	{
-        if (hd_debug)
-		{
+            foreach (replacee : replacees) msg = msg..", "..replacee.toString();
+
+            console.printf(msg.."]");
+        }
+
+        // Creates a new struct;
+        RTIPSpawnItem spawnee = RTIPSpawnItem(new('RTIPSpawnItem'));
+
+        // Populates the struct with relevant information,
+        spawnee.spawnName = name;
+        spawnee.isPersistent = persists;
+        spawnee.replaceItem = rep;
+        spawnee.spawnReplaces.copy(replacees);
+
+        // Pushes the finished struct to the array.
+        itemSpawnList.push(spawnee);
+    }
+
+    RTIPSpawnItemEntry addItemEntry(string name, int chance) {
+
+        // Creates a new struct;
+        RTIPSpawnItemEntry spawnee = RTIPSpawnItemEntry(new('RTIPSpawnItemEntry'));
+        spawnee.name = name;
+        spawnee.chance = chance;
+        return spawnee;
+    }
+
+    // appends an entry to ammoSpawnList;
+    void addAmmo(string name, Array<string> weapons) {
+
+        if (hd_debug) {
             let msg = "Adding Ammo Association Entry for "..name..": [";
 
             foreach (weapon : weapons) msg = msg..", "..weapon;
@@ -143,144 +140,138 @@ class RTIPHandler : EventHandler
             console.printf(msg.."]");
         }
 
-		// Creates a new struct;
-		RTIPSpawnAmmo spawnee = RTIPSpawnAmmo(new('RTIPSpawnAmmo'));
-		spawnee.ammoName = name;
-		spawnee.weaponNames.copy(weapons);
+        // Creates a new struct;
+        RTIPSpawnAmmo spawnee = RTIPSpawnAmmo(new('RTIPSpawnAmmo'));
+        spawnee.ammoName = name;
+        spawnee.weaponNames.copy(weapons);
 
-		// Pushes the finished struct to the array. 
-		ammoSpawnList.push(spawnee);
-	}
-
-
-	// Populates the replacement and association arrays. 
-	void init()
-	{
-		cvarsAvailable = true;
-
-		//-----------------
-		// Backpack Spawns
-		//-----------------
-
-		if (!fieldmedic_allowBackpacks)    backpackBlacklist.push((Class<Inventory>)('HDFieldMedicKit'));
-		if (!firstaidspray_allowBackpacks) backpackBlacklist.push((Class<Inventory>)('HDFirstAidSpray'));
-		if (!radicola_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('HDRadiCola'));
-		if (!gravboots_allowBackpacks)     backpackBlacklist.push((Class<Inventory>)('AntiGravBoots'));
-		if (!radboots_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('ProtectiveRadBoots'));
-		if (!jacketarmour_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)('HDLeatherArmour'));
-		if (!jacketarmour_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)('JacketArmour'));
-		if (!halfpack_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('HDHalfPack'));
+        // Pushes the finished struct to the array.
+        ammoSpawnList.push(spawnee);
+    }
 
 
-		// --------------------
-		// Item Spawns
-		// --------------------
+    // Populates the replacement and association arrays.
+    void init() {
 
-		// Field Medic Kit
-		Array<RTIPSpawnItemEntry> spawns_fieldmedic;
-		spawns_fieldmedic.push(additementry('PortableStimpack', fieldmedic_stimpack_bias));
-		spawns_fieldmedic.push(additementry('PortableMedikit', fieldmedic_medikit_bias));
-		additem('HDFieldMedicKit', spawns_fieldmedic, fieldmedic_persistent_spawning);
+        cvarsAvailable = true;
 
-		// First Aid Spray
-		Array<RTIPSpawnItemEntry> spawns_firstaidspray;
-		spawns_firstaidspray.push(additementry('PortableStimpack', firstaidspray_stimpack_bias));
-		spawns_firstaidspray.push(additementry('PortableMedikit', firstaidspray_medikit_bias));
-		additem('HDFirstAidSpray', spawns_firstaidspray, firstaidspray_persistent_spawning);
+        //-----------------
+        // Backpack Spawns
+        //-----------------
 
-		// Radi-Cola
-		Array<RTIPSpawnItemEntry> spawns_radicola;
-		// This technically isn't really accurate but I don't feel like screwing with it more before it's released. - [Ted]
-		spawns_radicola.push(additementry('HDHealingPotion', radicola_healthbonus_bias));
-		spawns_radicola.push(additementry('PortableStimpack', radicola_stimpack_bias));
-    	spawns_radicola.push(additementry('PortableMedikit', radicola_medikit_bias));
-		spawns_radicola.push(additementry('HDGoreBits', radicola_gorebits_bias));
-		spawns_radicola.push(additementry('TerrorCasing', radicola_gorebits_bias));
-		additem('HDRadiCola', spawns_radicola, radicola_persistent_spawning, false);
+        if (!fieldmedic_allowBackpacks)    backpackBlacklist.push((Class<Inventory>)('HDFieldMedicKit'));
+        if (!firstaidspray_allowBackpacks) backpackBlacklist.push((Class<Inventory>)('HDFirstAidSpray'));
+        if (!radicola_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('HDRadiCola'));
+        if (!gravboots_allowBackpacks)     backpackBlacklist.push((Class<Inventory>)('AntiGravBoots'));
+        if (!radboots_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('ProtectiveRadBoots'));
+        if (!jacketarmour_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)('HDLeatherArmour'));
+        if (!jacketarmour_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)('JacketArmour'));
+        if (!halfpack_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('HDHalfPack'));
 
-		// Half-pack
-		Array<RTIPSpawnItemEntry> spawns_halfpack;
-		spawns_halfpack.push(additementry('WildBackpack', halfpack_spawn_bias));
-		additem('WildHalfPack', spawns_halfpack, halfpack_persistent_spawning);
 
-		// Anti-Gravity Boots
-		Array<RTIPSpawnItemEntry> spawns_gravboots;
-		spawns_gravboots.push(additementry('HDSoulsphere', gravboots_spawn_bias));
-		additem('AntiGravBoots', spawns_gravboots, gravboots_persistent_spawning, false);
+        // --------------------
+        // Item Spawns
+        // --------------------
 
-    	// Anti-Radiation Boots
-		Array<RTIPSpawnItemEntry> spawns_radboots;
-		spawns_radboots.push(additementry('PortableRadsuit', radboots_spawn_bias));
-		additem('ProtectiveRadBoots', spawns_radboots, radboots_persistent_spawning, false);
+        // Field Medic Kit
+        Array<RTIPSpawnItemEntry> spawns_fieldmedic;
+        spawns_fieldmedic.push(additementry('PortableStimpack', fieldmedic_stimpack_bias));
+        spawns_fieldmedic.push(additementry('PortableMedikit', fieldmedic_medikit_bias));
+        additem('HDFieldMedicKit', spawns_fieldmedic, fieldmedic_persistent_spawning);
 
-		// Leather Armor
-		Array<RTIPSpawnItemEntry> spawns_jacketarmour;
-		spawns_jacketarmour.push(additementry('GarrisonArmour', jacketarmour_spawn_bias));
-		spawns_jacketarmour.push(additementry('BattleArmour', jacketarmour_spawn_bias));
-		additem('HDLeatherArmour', spawns_jacketarmour, jacketarmour_persistent_spawning);
-	}
-	
-	// Random stuff, stores it and forces negative values just to be 0.
-	bool giveRandom(int chance)
-	{
-		if (chance > -1)
-		{
-			let result = random(0, chance);
+        // First Aid Spray
+        Array<RTIPSpawnItemEntry> spawns_firstaidspray;
+        spawns_firstaidspray.push(additementry('PortableStimpack', firstaidspray_stimpack_bias));
+        spawns_firstaidspray.push(additementry('PortableMedikit', firstaidspray_medikit_bias));
+        additem('HDFirstAidSpray', spawns_firstaidspray, firstaidspray_persistent_spawning);
 
-			if (hd_debug) console.printf("Rolled a "..(result + 1).." out of "..(chance + 1));
+        // Radi-Cola
+        Array<RTIPSpawnItemEntry> spawns_radicola;
+        // This technically isn't really accurate but I don't feel like screwing with it more before it's released. - [Ted]
+        spawns_radicola.push(additementry('HDHealingPotion', radicola_healthbonus_bias));
+        spawns_radicola.push(additementry('PortableStimpack', radicola_stimpack_bias));
+        spawns_radicola.push(additementry('PortableMedikit', radicola_medikit_bias));
+        spawns_radicola.push(additementry('HDGoreBits', radicola_gorebits_bias));
+        spawns_radicola.push(additementry('TerrorCasing', radicola_gorebits_bias));
+        additem('HDRadiCola', spawns_radicola, radicola_persistent_spawning, false);
 
-			return result == 0;
-		}
+        // Half-pack
+        Array<RTIPSpawnItemEntry> spawns_halfpack;
+        spawns_halfpack.push(additementry('WildBackpack', halfpack_spawn_bias));
+        additem('WildHalfPack', spawns_halfpack, halfpack_persistent_spawning);
 
-		return false;
-	}
+        // Anti-Gravity Boots
+        Array<RTIPSpawnItemEntry> spawns_gravboots;
+        spawns_gravboots.push(additementry('HDSoulsphere', gravboots_spawn_bias));
+        additem('AntiGravBoots', spawns_gravboots, gravboots_persistent_spawning, false);
+
+        // Anti-Radiation Boots
+        Array<RTIPSpawnItemEntry> spawns_radboots;
+        spawns_radboots.push(additementry('PortableRadsuit', radboots_spawn_bias));
+        additem('ProtectiveRadBoots', spawns_radboots, radboots_persistent_spawning, false);
+
+        // Leather Armor
+        Array<RTIPSpawnItemEntry> spawns_jacketarmour;
+        spawns_jacketarmour.push(additementry('GarrisonArmour', jacketarmour_spawn_bias));
+        spawns_jacketarmour.push(additementry('BattleArmour', jacketarmour_spawn_bias));
+        additem('HDLeatherArmour', spawns_jacketarmour, jacketarmour_persistent_spawning);
+    }
+
+    // Random stuff, stores it and forces negative values just to be 0.
+    bool giveRandom(int chance) {
+        if (chance > -1) {
+            let result = random(0, chance);
+
+            if (hd_debug) console.printf("Rolled a "..(result + 1).." out of "..(chance + 1));
+
+            return result == 0;
+        }
+
+        return false;
+    }
 
     // Tries to replace the item during spawning.
-    bool tryReplaceItem(ReplaceEvent e, string spawnName, int chance)
-	{
-        if (giveRandom(chance))
-		{
+    bool tryReplaceItem(ReplaceEvent e, string spawnName, int chance) {
+        if (giveRandom(chance)) {
             if (hd_debug) console.printf(e.replacee.getClassName().." -> "..spawnName);
 
             e.replacement = spawnName;
 
             return true;
-		}
-
-		return false;
-	}
-
-	// Tries to create the item via random spawning.
-	bool tryCreateItem(Actor thing, string spawnName, int chance)
-	{
-		if (giveRandom(chance))
-		{
-			if (hd_debug) console.printf(thing.getClassName().." + "..spawnName);
-			
-			Actor.Spawn(spawnName, thing.pos);
-
-			return true;
-		}
+        }
 
         return false;
     }
-	
-	override void worldLoaded(WorldEvent e)
-	{
-		// Populates the main arrays if they haven't been already. 
-		if (!cvarsAvailable) init();
+
+    // Tries to create the item via random spawning.
+    bool tryCreateItem(Actor thing, string spawnName, int chance) {
+        if (giveRandom(chance)) {
+            if (hd_debug) console.printf(thing.getClassName().." + "..spawnName);
+
+            Actor.Spawn(spawnName, thing.pos);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    override void worldLoaded(WorldEvent e) {
+
+        // Populates the main arrays if they haven't been already.
+        if (!cvarsAvailable) init();
 
         foreach (bl : backpackBlacklist) {
-			if (hd_debug) console.printf("Removing "..bl.getClassName().." from Backpack Spawn Pool");
-                
-			BPSpawnPool.removeItem(bl);
-        }
-	}
+            if (hd_debug) console.printf("Removing "..bl.getClassName().." from Backpack Spawn Pool");
 
-    override void checkReplacement(ReplaceEvent e)
-	{
-		// Populates the main arrays if they haven't been already. 
-		if (!cvarsAvailable) init();
+            BPSpawnPool.removeItem(bl);
+        }
+    }
+
+    override void checkReplacement(ReplaceEvent e) {
+
+        // Populates the main arrays if they haven't been already.
+        if (!cvarsAvailable) init();
 
         // If there's nothing to replace or if the replacement is final, quit.
         if (!e.replacee || e.isFinal) return;
@@ -296,86 +287,73 @@ class RTIPHandler : EventHandler
         handleItemReplacements(e, candidateName);
     }
 
-    override void worldThingSpawned(WorldEvent e)
-	{
-		// Populates the main arrays if they haven't been already. 
-		if (!cvarsAvailable) init();
+    override void worldThingSpawned(WorldEvent e) {
 
-		// If thing spawned doesn't exist, quit.
-		if (!e.thing) return;
+        // Populates the main arrays if they haven't been already.
+        if (!cvarsAvailable) init();
 
-		// If thing spawned is blacklisted, quit.
-		foreach (bl : blacklist) if (e.thing is bl) return;
+        // If thing spawned doesn't exist, quit.
+        if (!e.thing) return;
 
-		string candidateName = e.thing.getClassName();
-		
-		// Pointers for specific classes.
-		let ammo = HDAmmo(e.thing);
+        // If thing spawned is blacklisted, quit.
+        foreach (bl : blacklist) if (e.thing is bl) return;
 
-		// If the thing spawned is an ammunition, add any and all items that can use this.
-		if (ammo) handleAmmoUses(ammo, candidateName);
+        // Handle Ammo Box Loot Table Filtering
+        if (e.thing is 'HDAmBox' && !ammoBoxList) handleAmmoBoxLootTable();
 
-		//Do this AFTER pushing ItemsThatUseThis()
-		//or ammo purging gets messed up lol
-		
-		// If current map is Range, quit.
+        string candidateName = e.thing.getClassName();
+
+        // Pointers for specific classes.
+        let ammo = HDAmmo(e.thing);
+
+        // If the thing spawned is an ammunition, add any and all items that can use this.
+        if (ammo) handleAmmoUses(ammo, candidateName);
+
+        //Do this AFTER pushing ItemsThatUseThis()
+        //or ammo purging gets messed up lol
+
+        // If current map is Range, quit.
         if (level.MapName == 'RANGE') return;
-		
-		if (e.thing is 'HDAmBox') {
-			handleAmmoBoxLootTable();
-		} else {
-            handleItemSpawns(e.thing, ammo, candidateName);
-		}
-	}
 
-	private void handleAmmoBoxLootTable()
-	{
-        if (!ammoBoxList)
-		{
-            ammoBoxList = HDAmBoxList.Get();
+        handleItemSpawns(e.thing, ammo, candidateName);
+    }
 
-			foreach (bl : backpackBlacklist)
-			{
-				let index = ammoBoxList.invClasses.find(bl.getClassName());
+    private void handleAmmoBoxLootTable() {
+        ammoBoxList = HDAmBoxList.Get();
 
-				if (index != ammoBoxList.invClasses.Size())
-				{
-					if (hd_debug) console.printf("Removing "..bl.getClassName().." from Ammo Box Loot Table");
+        foreach (bl : backpackBlacklist) {
+            let index = ammoBoxList.invClasses.find(bl.getClassName());
 
-					ammoBoxList.invClasses.Delete(index);
-				}
-			}
+            if (index != ammoBoxList.invClasses.Size()) {
+                if (hd_debug) console.printf("Removing "..bl.getClassName().." from Ammo Box Loot Table");
+
+                ammoBoxList.invClasses.Delete(index);
+            }
         }
-	}
+    }
 
-	private void handleAmmoUses(HDAmmo ammo, string candidateName)
-	{
-        foreach (ammoSpawn : ammoSpawnList) if (candidateName ~== ammoSpawn.ammoName)
-		{
-            if (hd_debug)
-			{
+    private void handleAmmoUses(HDAmmo ammo, string candidateName) {
+        foreach (ammoSpawn : ammoSpawnList) if (candidateName ~== ammoSpawn.ammoName) {
+            if (hd_debug) {
                 console.printf("Adding the following to the list of items that use "..ammo.getClassName().."");
                 foreach (weapon : ammoSpawn.weaponNames) console.printf("* "..weapon);
-			}
+            }
 
             ammo.itemsThatUseThis.append(ammoSpawn.weaponNames);
         }
-	}
+    }
 
-    private void handleItemReplacements(ReplaceEvent e, string candidateName)
-	{
+    private void handleItemReplacements(ReplaceEvent e, string candidateName) {
+
         // Checks if the level has been loaded more than 1 tic.
         bool prespawn = !(level.maptime > 1);
 
-        // Iterates through the list of item candidates for thing.
-        foreach (itemSpawn : itemSpawnList)
-		{
-            if ((prespawn || itemSpawn.isPersistent) && itemSpawn.replaceItem)
-			{
-                foreach (spawnReplace : itemSpawn.spawnReplaces)
-				{
-                    if (spawnReplace.name ~== candidateName)
-					{
+        // Iterates through the list of item candidates for e.thing.
+        foreach (itemSpawn : itemSpawnList) {
+
+            if ((prespawn || itemSpawn.isPersistent) && itemSpawn.replaceItem) {
+                foreach (spawnReplace : itemSpawn.spawnReplaces) {
+                    if (spawnReplace.name ~== candidateName) {
                         if (hd_debug) console.printf("Attempting to replace "..candidateName.." with "..itemSpawn.spawnName.."...");
 
                         if (tryReplaceItem(e, itemSpawn.spawnName, spawnReplace.chance)) return;
@@ -386,32 +364,29 @@ class RTIPHandler : EventHandler
     }
 
     private void handleItemSpawns(Actor thing, HDAmmo ammo, string candidateName) {
-        
-		// Checks if the level has been loaded more than 1 tic.
-		bool prespawn = !(level.maptime > 1);
 
-		// Iterates through the list of item candidates for e.thing.
-		foreach (itemSpawn : itemSpawnList)
-		{
-			// if an item is owned or is an ammo (doesn't retain owner ptr), 
-			// do not replace it. 
-			let item = Inventory(thing);
-			if (
-				(prespawn || itemSpawn.isPersistent)
-			 && (!(item && item.owner) && (!ammo || prespawn))
-			 && !itemSpawn.replaceItem
-			)
-			{
-				foreach (spawnReplace : itemSpawn.spawnReplaces)
-				{
-					if (spawnReplace.name ~== candidateName)
-					{
-						if (hd_debug) console.printf("Attempting to spawn "..itemSpawn.spawnName.." with "..candidateName.."...");
+        // Checks if the level has been loaded more than 1 tic.
+        bool prespawn = !(level.maptime > 1);
+
+        // Iterates through the list of item candidates for e.thing.
+        foreach (itemSpawn : itemSpawnList) {
+
+            // if an item is owned or is an ammo (doesn't retain owner ptr),
+            // do not replace it.
+            let item = Inventory(thing);
+            if (
+                (prespawn || itemSpawn.isPersistent)
+             && (!(item && item.owner) && (!ammo || prespawn))
+             && !itemSpawn.replaceItem
+            ) {
+                foreach (spawnReplace : itemSpawn.spawnReplaces) {
+                    if (spawnReplace.name ~== candidateName) {
+                        if (hd_debug) console.printf("Attempting to spawn "..itemSpawn.spawnName.." with "..candidateName.."...");
 
                         if (tryCreateItem(thing, itemSpawn.spawnName, spawnReplace.chance)) return;
-					}
-				}
-			}
-		}
-	}
+                    }
+                }
+            }
+        }
+    }
 }
