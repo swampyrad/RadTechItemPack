@@ -97,7 +97,8 @@ MENU_RDCLORE3 = "here uwu";
 
 // Leather Armour
 MENU_TITLEJACKET = "------ Leather Armour Options ------";
-MENU_JACKETTEXT1 = "Control the spawn rate of Leather Armour on Garrison and Battle Armour";
+MENU_JACKETTEXT1 = "Control the spawn rate of Leather Armour on Garrison Armour";
+MENU_JACKETTEXT2 = "Control the spawn rate of Leather Armour on Battle Armour";
 MENU_JACKETBACKPACK = "Control whether the Leather Armour spawns in Backpacks";
 
 MENU_JACKETLORE1 = "stuff";
@@ -115,7 +116,7 @@ MENU_HALFPACKLORE3 = "here uwu";
 
 // Anti-Radiation Boots
 MENU_TITLERADBOOTS = "------ Anti-Radiation Boots Options ------";
-MENU_RADBOOTSTEXT1 = "Control the spawn rate of Anti-Radiation Boots on Radsuits";
+MENU_RADBOOTSTEXT1 = "Control the spawn rate of Anti-Radiation Boots with Radsuits";
 MENU_RADBOOTSBACKPACK = "Control whether the Anti-Radiation Boots spawn in Backpacks";
 
 MENU_RADBOOTSLORE1 = "stuff";
@@ -124,7 +125,7 @@ MENU_RADBOOTSLORE3 = "here uwu";
 
 // Anti-Gravity Boots
 MENU_TITLEGRAVBOOTS = "------ Anti-Gravity Boots Options ------";
-MENU_GRAVBOOTSTEXT1 = "Control the spawn rate of Anti-Gravity Boots on Radsuits";
+MENU_GRAVBOOTSTEXT1 = "Control the spawn rate of Anti-Gravity Boots with Soulspheres";
 MENU_GRAVBOOTSBACKPACK = "Control whether the Anti-Gravity Boots spawn in Backpacks";
 
 MENU_GRAVBOOTSLORE1 = "stuff";
