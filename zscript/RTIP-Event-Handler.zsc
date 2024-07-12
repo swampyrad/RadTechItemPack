@@ -159,14 +159,29 @@ class RTIPHandler : EventHandler {
         // Backpack Spawns
         //-----------------
 
-        if (!fieldmedic_allowBackpacks)    backpackBlacklist.push((Class<Inventory>)('HDFieldMedicKit'));
-        if (!firstaidspray_allowBackpacks) backpackBlacklist.push((Class<Inventory>)('HDFirstAidSpray'));
-        if (!radicola_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('HDRadiCola'));
-        if (!gravboots_allowBackpacks)     backpackBlacklist.push((Class<Inventory>)('AntiGravBoots'));
-        if (!radboots_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('ProtectiveRadBoots'));
-        if (!jacketarmour_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)('HDLeatherArmour'));
-        if (!jacketarmour_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)('JacketArmour'));
-        if (!halfpack_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('HDHalfPack'));
+        if (!fieldmedic_allowBackpacks)     backpackBlacklist.push((Class<Inventory>)('HDFieldMedicKit'));
+        if (!firstaidspray_allowBackpacks)  backpackBlacklist.push((Class<Inventory>)('HDFirstAidSpray'));
+        if (!radicola_allowBackpacks)       backpackBlacklist.push((Class<Inventory>)('HDRadiCola'));
+        if (!gravboots_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('AntiGravBoots'));
+        if (!radboots_allowBackpacks)       backpackBlacklist.push((Class<Inventory>)('ProtectiveRadBoots'));
+        if (!jacketarmour_allowBackpacks)   backpackBlacklist.push((Class<Inventory>)('HDLeatherArmour'));
+        if (!jacketarmour_allowBackpacks)   backpackBlacklist.push((Class<Inventory>)('JacketArmour'));
+        if (!halfpack_allowBackpacks)       backpackBlacklist.push((Class<Inventory>)('HDHalfPack'));
+        if (!cacoplush_allowBackpacks)      {backpackBlacklist.push((Class<Inventory>)('CacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('LesbianPrideCacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('GayPrideCacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('BisexualCacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('TransPrideCacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('AcePrideCacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('AroCacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('AgenderPrideCacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('EnbyPrideCacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('PanPrideCacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('UkraineCacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('TwoEyedCacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('RenegadeCacoPlushDoll'));
+                                             backpackBlacklist.push((Class<Inventory>)('FeloniousBolus'));
+                                            }
 
 
         // --------------------
