@@ -25,6 +25,10 @@ OptionMenu RadTechItemPack
     StaticText ""
     Submenu "$TAG_RADICOLA", "RadiCola", 0, 1
     StaticText ""
+    StaticText "--- Miscellaneous ---"
+    StaticText ""
+    Submenu "$TAG_CACOPLUSHIES", "CacoPlush", 0, 1
+    StaticText ""
     StaticText "--- Reset Options ---", "red"
 	StaticText ""
 	SafeCommand "Reset all options for Radtech Weapons", "RTIP_Reset_Cvars"
@@ -38,6 +42,26 @@ AddOptionMenu "OptionsMenu"
 AddOptionMenu "HDAddonMenu"
 {
     Submenu "$RADTECHITEMS_MENU", "RadTechItemPack"
+}
+
+OptionMenu CacoPlush
+{
+//these don't replace anything so the only
+//option is whether or not you want them to
+//show up randomly in backpacks
+
+    Title "$MENU_TITLECACOPLUSH"
+	StaticText  "$MENU_CACOBACKPACK", "white"
+	Option "$MENU_BACKPACKSALLOWED", "cacoplush_allowBackpacks", "OnOff"
+ 	StaticText ""
+   	StaticText ""
+	StaticText "$MENU_RESETOPTIONS", "Green"
+	SafeCommand "$MENU_RESETALLOPTIONS", "cacoplush_reset_cvars"
+	StaticText ""
+	StaticText "$MENU_LORETAG", "Green"
+	StaticText ""
+	StaticText "$MENU_CACOLORE1", "white"
+	StaticText "$MENU_CACOLORE2", "white"
 }
 
 OptionMenu LeatherArmour

@@ -12,6 +12,7 @@ TAG_RADBOOTS = "Anti-Radiation Boots";
 TAG_GRAVBOOTS = "Anti-Gravity Boots";
 TAG_JACKET = "Leather Armour";
 TAG_RADIRADIO = "UAC Pocket Radio";
+TAG_CACOPLUSHIES = "Cacodemon Plushie";
 
 // Pickup messages
 PICKUP_RADICOLA = "Picked up a can of Radi-Cola.";
@@ -62,6 +63,14 @@ MENU_RESETCONV = "Reset conv. options";
 MENU_RESETDROP = "Reset drop. options";
 MENU_RESETWEP = "Reset wep. options";
 MENU_RESETMAG = "Reset mag options";
+
+// Cacodemon Plushies
+MENU_TITLECACOPLUSH = "------ Cacodemon Plushie Options ------";
+MENU_CACOBACKPACK = "Control whether Cacodemon Plushies spawn in Backpacks";
+
+MENU_CACOLORE1 = "*insert cheeky commentary on shameless corporations";
+MENU_CACOLORE2 = " profitting off a world-ending disaster here lol*";
+
 
 // Field Medic Kit
 MENU_TITLEFMK = "------ Field Medical Kit Options ------";

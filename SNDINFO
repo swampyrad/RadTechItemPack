@@ -3,3 +3,6 @@ misc/radicola     "sounds/radicola.ogg"    $limit misc/radicola 6
 misc/emptycan     "sounds/emptycan.ogg"    $limit misc/emptycan 6
 
 firstaidcan/spray   fa_spray
+
+plush/squeak ccsqueak
+felonious/bolus fbbounce

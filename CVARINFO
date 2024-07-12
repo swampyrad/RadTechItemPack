@@ -40,3 +40,6 @@ server bool jacketarmour_allowBackpacks = true;
 server int jacketarmour_greenarmour_spawn_bias = 19;
 server int jacketarmour_bluearmour_spawn_bias = 19;
 server bool jacketarmour_persistent_spawning = false;
+
+// Cacodemon Plushies
+server bool cacoplush_allowBackpacks = true;

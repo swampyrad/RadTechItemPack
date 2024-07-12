@@ -5,5 +5,6 @@ alias radicola_reset_cvars "resetcvar radicola_healthbonus_bias; resetcvar radic
 alias radboots_reset_cvars "resetcvar radboots_spawn_bias; resetcvar radboots_allowBackpacks; resetcvar radboots_persistent_spawning;"
 alias gravboots_reset_cvars "resetcvar gravboots_spawn_bias; resetcvar gravboots_allowBackpacks; resetcvar gravboots_persistent_spawning;"
 alias halfpack_reset_cvars "resetcvar halfpack_spawn_bias; resetcvar halfpack_allowBackpacks; resetcvar halfpack_persistent_spawning;"
+alias cacoplush_reset_cvars "resetcvar cacoplush_allowBackpacks;"
 
-alias RTIP_Reset_Cvars "jacket_reset_cvars; fmk_reset_cvars; fas_reset_cvars; radicola_reset_cvars; radboots_reset_cvars; gravboots_reset_cvars; halfpack_reset_cvars;"
+alias RTIP_Reset_Cvars "jacket_reset_cvars; fmk_reset_cvars; fas_reset_cvars; radicola_reset_cvars; radboots_reset_cvars; gravboots_reset_cvars; halfpack_reset_cvars; cacoplush_reset_cvars"

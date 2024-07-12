@@ -16,31 +16,8 @@ version "4.10"
 
 // Misc
 #include "zscript/Radi-Radio.zsc"
-//#include "zscript/Cacodemon-Plushes.zsc"
+#include "zscript/Cacodemon-Plushes.zsc"
 
-/*
-
-
-░░░░░░░░░░▄▄▀▀▀▀▀▀▀▀▀▄▄░░░░░░░░░░
-░░░░░░░░░█░░░░░░░░░░░░░█░░░░░░░░░
-░░░░░░░░█░░░░░░░░░░▄▄▄░░█░░░░░░░░
-░░░░░░░░█░░▄▄▄░░▄░░███░░█░░░░░░░░
-░░░░░░░░▄█░▄░░░▀▀▀░░░▄░█▄░░░░░░░░
-░░░░░░░░█░░▀█▀█▀█▀█▀█▀░░█░░░░░░░░
-░░░░░░░░▄██▄▄▀▀▀▀▀▀▀▄▄██▄░░░░░░░░
-░░░░░░▄█░█▀▀█▀▀▀█▀▀▀█▀▀█░█▄░░░░░░
-░░░░░▄▀░▄▄▀▄▄▀▀▀▄▀▀▀▄▄▀▄▄░▀▄░░░░░
-░░░░░█░░░░▀▄░█▄░░░▄█░▄▀░░░░█░░░░░
-░░░░░░▀▄▄░█░░█▄▄▄▄▄█░░█░▄▄▀░░░░░░
-░░░░░░░░▀██▄▄███████▄▄██▀░░░░░░░░
-░░░░░░░░████████▀████████░░░░░░░░
-░░░░░░░▄▄█▀▀▀▀█░░░█▀▀▀▀█▄▄░░░░░░░
-░░░░░░░▀▄▄▄▄▄▀▀░░░▀▀▄▄▄▄▄▀░░░░░░░
-
-* pretty functional now.
-* fitting release candidate.
-* caco plushies are still broken though.
-* should be pretty easy to fix, ey?
-* ha, if only. - [Ted]
-
-*/
+//trying to fix the plushies so you can pick them out
+//with the loadout editor, building off what Ted
+//started working on
