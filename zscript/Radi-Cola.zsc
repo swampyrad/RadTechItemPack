@@ -174,9 +174,10 @@ class SpentRadiCola:HDActor {
 	    -noextremedeath -floorclip +shootable +noblood +forcexybillboard
 		+activatemcross -noteleport +noblockmonst +pushable
 		+missile +bounceonactors +usebouncestate
-		
+		+invulnerable 
+
 		bouncetype "doom";
-	    damagetype "none";
+	    	damagetype "none";
 		bouncesound "misc/emptycan";
 		bouncefactor 0.5;
 		
