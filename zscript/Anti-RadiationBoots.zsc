@@ -19,7 +19,7 @@ class WornRadBoots:HDDamageHandler{
 		HDDamageHandler.priority 1000;
 		HDPickup.wornlayer STRIP_RADBOOTS;
 		HDPickup.overlaypriority 150;
-		tag "anti-radiation boots";
+		tag "$TAG_RADBOOTS";
 	}
 	states{spawn:TNT1 A 0;stop;}
 	override inventory createtossable(int amt){
@@ -280,5 +280,13 @@ class ProtectiveRadBoots:HDPickup{
 			}
 			player.crouchfactor=min(player.crouchfactor,0.7);
 		}fail;
+	}
+}
+
+class RadBootsSpawn:actor{
+	override void postbeginplay(){
+		super.postbeginplay();
+  		A_SpawnItemEx("ProtectiveRadBoots",random(-5,5),random(-5,5),flags:SXF_NOCHECKPOSITION);
+		self.Destroy();
 	}
 }

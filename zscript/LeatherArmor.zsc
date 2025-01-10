@@ -15,7 +15,7 @@ class HDLeatherArmour:HDMagAmmo{
 		inventory.amount 1;
 		hdmagammo.maxperunit LEATHERARMOUR;
 		hdmagammo.magbulk ENC_LEATHERARMOUR;
-		tag "leather jacket";
+		tag "$TAG_JACKET";
 		inventory.icon "JAKTA0";
 	}
 	

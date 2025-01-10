@@ -25,7 +25,7 @@ class WornAntiGravBoots:HDDamageHandler{
 		HDDamageHandler.priority 1000;
 		HDPickup.wornlayer STRIP_ANTIGRAVBOOTS;
 		HDPickup.overlaypriority 150;
-		tag "anti-gravity boots";
+		tag "$TAG_GRAVBOOTS";
 	}
 	states{spawn:TNT1 A 0;stop;}
 
@@ -223,5 +223,13 @@ class AntiGravBoots:HDPickup{
 			}
 			player.crouchfactor=min(player.crouchfactor,0.7);
 		}fail;
+	}
+}
+
+class AGBootsSpawn:actor{
+	override void postbeginplay(){
+		super.postbeginplay();
+  		A_SpawnItemEx("AntiGravBoots",random(-5,5),random(-5,5),flags:SXF_NOCHECKPOSITION);
+		self.Destroy();
 	}
 }

@@ -208,7 +208,7 @@ class RTIPHandler : EventHandler {
         spawns_radicola.push(additementry('PortableMedikit', radicola_medikit_bias));
         spawns_radicola.push(additementry('HDGoreBits', radicola_gorebits_bias));
         spawns_radicola.push(additementry('TerrorCasing', radicola_gorebits_bias));
-        additem('HDRadiCola', spawns_radicola, radicola_persistent_spawning, false);
+        additem('RadiColaSpawn', spawns_radicola, radicola_persistent_spawning, false);
 
         // Half-pack
         Array<RTIPSpawnItemEntry> spawns_halfpack;
@@ -218,12 +218,12 @@ class RTIPHandler : EventHandler {
         // Anti-Gravity Boots
         Array<RTIPSpawnItemEntry> spawns_gravboots;
         spawns_gravboots.push(additementry('HDSoulsphere', gravboots_spawn_bias));
-        additem('AntiGravBoots', spawns_gravboots, gravboots_persistent_spawning, false);
+        additem('AGBootsSpawn', spawns_gravboots, gravboots_persistent_spawning, false);
 
         // Anti-Radiation Boots
         Array<RTIPSpawnItemEntry> spawns_radboots;
         spawns_radboots.push(additementry('PortableRadsuit', radboots_spawn_bias));
-        additem('ProtectiveRadBoots', spawns_radboots, radboots_persistent_spawning, false);
+        additem('RadBootsSpawn', spawns_radboots, radboots_persistent_spawning, false);
 
         // Leather Armor
         Array<RTIPSpawnItemEntry> spawns_jacketarmour;

@@ -24,7 +24,7 @@ class HDFieldMedicKit:HDWoundFixer{
 		
 		scale 0.5;
 		weapon.selectionorder 1004;
-		tag "$TAG_FieldMedicKit";
+		tag "$TAG_FIELDMEDICKIT";
 		hdweapon.refid "fmd";
 	}
 	

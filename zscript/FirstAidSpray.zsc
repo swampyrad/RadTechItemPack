@@ -1,6 +1,6 @@
 enum MediSprayNums{
-	FIRSTAID_FLESHGIVE=5,
-	FIRSTAID_MAXFLESH=14,//about 3 doses worth
+	FIRSTAID_FLESHGIVE=2,//reducing SF dosage so it doesn't hurt as much 
+	FIRSTAID_MAXFLESH=14,//7 doses worth
 	FIRSTAID_NOTAPLAYER=MAXPLAYERS+1,
 
 	MEDSPRAY_SECONDFLESH=1,
@@ -28,22 +28,22 @@ class HDFirstAidSpray :HDWoundFixer{
 		weapon.slotpriority 0.5;
 		inventory.icon "FAIDB0";
 		scale 0.4;
-		tag "First Aid Spray";
+		tag "$TAG_FIRSTAIDSPRAY";
 		hdweapon.refid "aid";
 
 		hdweapon.wornlayer 0;
 	}
 
-    override string PickupMessage() {
-	    String pickupmessage = Stringtable.Localize("$PICKUP_FIRSTAIDSPRAY_FULL"); 
+  override string PickupMessage() {
+	  String pickupmessage = Stringtable.Localize("$PICKUP_FIRSTAIDSPRAY_FULL"); 
 	   
-	    if(!weaponstatus[MEDSPRAY_SECONDFLESH]>0)
-	        pickupmessage = Stringtable.Localize("$PICKUP_FIRSTAIDSPRAY_EMPTY"); 
-		
-		if(weaponstatus[MEDSPRAY_SECONDFLESH]<FIRSTAID_MAXFLESH)
-		    pickupmessage = Stringtable.Localize("$PICKUP_FIRSTAIDSPRAY_USED"); 
+	  if(!weaponstatus[MEDSPRAY_SECONDFLESH])
+	    pickupmessage = Stringtable.Localize("$PICKUP_FIRSTAIDSPRAY_EMPTY"); 
+		else if(weaponstatus[MEDSPRAY_SECONDFLESH]<FIRSTAID_MAXFLESH)
+		  pickupmessage = Stringtable.Localize("$PICKUP_FIRSTAIDSPRAY_USED"); 
 	    
-	    return pickupmessage;}
+	  return pickupmessage;
+	}
 
 	override void initializewepstats(bool idfa){
 		weaponstatus[MEDSPRAY_SECONDFLESH] = FIRSTAID_MAXFLESH;
@@ -71,7 +71,6 @@ class HDFirstAidSpray :HDWoundFixer{
 
 		int usedon=weaponstatus[MEDSPRAY_USEDON];
 
-
 		if(usedon>=0){
 			int upn=weaponstatus[MEDSPRAY_USEDON];
 			string pn=
@@ -88,7 +87,6 @@ class HDFirstAidSpray :HDWoundFixer{
 				0.2+min(0.4,0.01*ww.weaponstatus[MEDSPRAY_BLOOD]),scale:(1.5,1.5)*(1+0.02*ww.weaponstatus[MEDSPRAY_BLOOD])
 			);
 		}
-
 
 		int btn=hpl.player.cmd.buttons;
 
@@ -122,6 +120,7 @@ class HDFirstAidSpray :HDWoundFixer{
 		.."  "..WEPHELP_ZOOM.."  Treat burns\n"
 		;
 	}
+	
 	action void A_FirstAidReady(){
 		A_WeaponReady(WRF_NOFIRE|WRF_ALLOWUSER1|WRF_ALLOWUSER3);
 		if(!player)return;
