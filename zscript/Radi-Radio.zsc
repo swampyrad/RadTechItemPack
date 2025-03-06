@@ -16,6 +16,14 @@ class HDPocketRadio:HDWeapon{
 		hdweapon.refid "prd";
 	}
 
+  //autoplay radio on map start
+  override void DoEffect(){
+    super.DoEffect();
+    if(level.time<=1
+       &&channel>0)
+       S_ChangeMusic("rdioch"..channel);
+  }
+
   override string PickupMessage() {
 	  String pickupmessage = Stringtable.Localize("$PICKUP_RADIRADIO"); 
 	  return pickupmessage;
