@@ -3,15 +3,14 @@
 // Anti-Gravity Boots
 //-------------------------------------------------
 
-const STRIP_ANTIGRAVBOOTS=1400;
-const ENC_ANTIGRAVBOOTS=35;
-const HDLD_ANTIGRAVBOOTS="AGV";//Anti-GraVity
+const STRIP_GRAVBOOTS=1400;
+const ENC_GRAVBOOTS=35;
+const HDLD_GRAVBOOTS="AGV";//Anti-GraVity
 
-const ANTIGRAV_MAXCHARGE=500;
-
+const GRAVBOOTS_MAXCHARGE=500;
 
 class WornAntiGravBoots:HDDamageHandler{
-	int antigrav_charge;
+	int gravboots_charge;
 
 	default{
 		+nointeraction;
@@ -23,7 +22,7 @@ class WornAntiGravBoots:HDDamageHandler{
 		-inventory.isarmor
 		inventory.maxamount 1;inventory.amount 1;
 		HDDamageHandler.priority 1000;
-		HDPickup.wornlayer STRIP_ANTIGRAVBOOTS;
+		HDPickup.wornlayer STRIP_GRAVBOOTS;
 		HDPickup.overlaypriority 150;
 		tag "$TAG_GRAVBOOTS";
 	}
@@ -31,7 +30,7 @@ class WornAntiGravBoots:HDDamageHandler{
 
 	override void postbeginplay(){
 		super.postbeginplay();
-		antigrav_charge=ANTIGRAV_MAXCHARGE;
+		gravboots_charge=GRAVBOOTS_MAXCHARGE;
 	}
 
 	override inventory createtossable(int amt){
@@ -61,20 +60,22 @@ class WornAntiGravBoots:HDDamageHandler{
 
 		let hp=HDPlayerPawn(owner);
         
-        //the boots should recharge if you're not moving
-		if(hp&&antigrav_charge>0&&(hp.vel.x>1||hp.vel.y>1||hp.vel.z>1)){
-			antigrav_charge--;
+    //the boots should recharge if you're not moving
+		if(hp
+		   &&gravboots_charge>0
+		   &&(hp.vel.x>1||hp.vel.y>1||!(hp.vel.z==0))
+		  ){gravboots_charge--;
 
-            //if the boots have a charge, they'll 
-            //lower your gravity
-			if(!antigrav_charge<1){
+      //if the boots have a charge, they'll 
+      //lower your gravity
+			if(!gravboots_charge<1){
 				owner.gravity=HDCONST_GRAVITY/3;
 			}
 			else owner.gravity=HDCONST_GRAVITY;
 
 		}//if the player is still, the boots will recharge
-		else if(antigrav_charge<ANTIGRAV_MAXCHARGE)
-		    antigrav_charge++;
+		else if(gravboots_charge<GRAVBOOTS_MAXCHARGE)
+		    gravboots_charge++;
 		    
 		if(!hp){destroy();return;}
 	}
@@ -100,14 +101,13 @@ class WornAntiGravBoots:HDDamageHandler{
         
         //draws charge amount on boots sprite
 		sb.drawstring(
-			sb.pnewsmallfont,sb.formatnumber(antigrav_charge/5),
+			sb.pnewsmallfont,sb.formatnumber(gravboots_charge/5),
 			am?(14,136):(-128,-10),
 			am?(sb.DI_TOPLEFT|sb.DI_TEXT_ALIGN_RIGHT)
 			:(sb.DI_SCREEN_CENTER_BOTTOM|sb.DI_TEXT_ALIGN_RIGHT),
 			Font.CR_RED,scale:(0.5,0.5)
 		);
 	}
-
 
 	void DestroyAntiGravBoots(){
 	//if everything works perfectly, this should never happen
@@ -119,8 +119,6 @@ class WornAntiGravBoots:HDDamageHandler{
 	}
 }
 
-
-
 class AntiGravBoots:HDPickup{
 	default{
 		//$Category "Gear/Hideous Destructor/Supplies"
@@ -130,13 +128,13 @@ class AntiGravBoots:HDPickup{
 		inventory.pickupmessage "You got the anti-gravity boots!";
 		inventory.pickupsound "weapons/pocket";
 		inventory.icon "AGRVA0";
-		hdpickup.bulk ENC_ANTIGRAVBOOTS;
-		tag "anti-gravity boots";
-		hdpickup.refid HDLD_ANTIGRAVBOOTS;
+		hdpickup.bulk ENC_GRAVBOOTS;
+		tag "$TAG_GRAVBOOTS";
+		hdpickup.refid HDLD_GRAVBOOTS;
 	}
 	
 	override string PickupMessage() {
-	    String pickupmessage = Stringtable.Localize("$PICKUP_ANTIGRAVBOOTS"); 
+	    String pickupmessage = Stringtable.Localize("$PICKUP_GRAVBOOTS"); 
 	    return pickupmessage;
 	}
 
@@ -168,7 +166,7 @@ class AntiGravBoots:HDPickup{
 			&&other.player.cmd.buttons&BT_USE
 			&&!other.findinventory("WornAntiGravBoots")
 		){
-			wornlayer=STRIP_ANTIGRAVBOOTS;
+			wornlayer=STRIP_GRAVBOOTS;
 			bool intervening=!HDPlayerPawn.CheckStrip(other,self,false);
 			wornlayer=0;
 
@@ -199,7 +197,7 @@ class AntiGravBoots:HDPickup{
 			if(owrs){
 				if(!HDPlayerPawn.CheckStrip(self,owrs))return;
 			}else{
-				invoker.wornlayer=STRIP_ANTIGRAVBOOTS+1;
+				invoker.wornlayer=STRIP_GRAVBOOTS+1;
 				if(!HDPlayerPawn.CheckStrip(self,invoker)){
 					invoker.wornlayer=0;
 					return;
