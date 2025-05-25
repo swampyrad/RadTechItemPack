@@ -262,7 +262,7 @@ class HDFieldMedicKit:HDWoundFixer{
 	injectbandage:
 		TNT1 A random(7,14){
 			if(invoker.target){
-				A_WeaponMessage("Working on "..HDMath.GetName(invoker.target).."...",20);
+				A_WeaponMessage("Working on "..invoker.target.GetTag().."...",20);
 				if(random(0,2)){
 					if(!random(0,2))invoker.target.A_StartSound("bandage/rustle",CHAN_BODY);
 					return;
