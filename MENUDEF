@@ -270,6 +270,7 @@ OptionMenu AntiRadBoots
 	StaticText "$MENU_RADBOOTSLORE3", "white"
 }
 
+OptionMenu PogoStick
 {
     Title "$MENU_TITLEPOGOSTICK"
    	StaticText "$MENU_NOTICE", "Green"
