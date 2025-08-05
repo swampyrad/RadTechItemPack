@@ -14,7 +14,7 @@ class HDPogoStick:HDWeapon{
         weapon.selectionorder 101;
 	
 		scale 0.7;
-		tag "Pogo stick";
+		tag "$TAG_POGOSTICK";
 		hdweapon.refid "pog";   //poggers bro!! 8y
 	}
 
@@ -22,7 +22,7 @@ class HDPogoStick:HDWeapon{
 	override HDWeapon GetSpareWeapon( Actor newOwner, bool reverse, bool doSelect ) { return GetSpareWeaponRegular( newOwner, reverse, doSelect ); }
 
     override string PickupMessage() {
-	    String pickupmessage = "You found the pogo stick!"; 
+	    String pickupmessage = "$PICKUP_PPGOSTICK"; 
 	    return pickupmessage;
 	}
 
@@ -124,3 +124,4 @@ class HDPogoStick:HDWeapon{
 	
 	}
 }
+
