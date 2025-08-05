@@ -125,3 +125,10 @@ class HDPogoStick:HDWeapon{
 	}
 }
 
+class PogoStickSpawn:actor{
+	override void postbeginplay(){
+		super.postbeginplay();
+  		A_SpawnItemEx("HDPogoStick",random(-5,5),random(-5,5),flags:SXF_NOCHECKPOSITION);
+		self.Destroy();
+	}
+}
