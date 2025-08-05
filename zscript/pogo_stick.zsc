@@ -22,7 +22,7 @@ class HDPogoStick:HDWeapon{
 	override HDWeapon GetSpareWeapon( Actor newOwner, bool reverse, bool doSelect ) { return GetSpareWeaponRegular( newOwner, reverse, doSelect ); }
 
     override string PickupMessage() {
-	    String pickupmessage = "$PICKUP_PPGOSTICK"; 
+	    String pickupmessage = "$PICKUP_POGOSTICK"; 
 	    return pickupmessage;
 	}
 
