@@ -17,7 +17,4 @@ version "4.10"
 // Misc
 #include "zscript/Radi-Radio.zsc"
 #include "zscript/Cacodemon-Plushes.zsc"
-
-//trying to fix the plushies so you can pick them out
-//with the loadout editor, building off what Ted
-//started working on
+#include "zscript/pogo_stick.zsc"
