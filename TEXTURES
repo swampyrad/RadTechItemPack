@@ -486,3 +486,15 @@ sprite FBOFC0, 21, 20{
   offset -50,-45
   patch FBOLA0, 0, 0{}
 }
+
+//pogo stick
+sprite POGOA0, 25, 45{
+    offset 12, 45
+    patch POGOA0,0,0
+}
+
+sprite POGOB0, 25, 25{
+    offset 12, 25
+    patch POGOA0,0,0
+}
+
