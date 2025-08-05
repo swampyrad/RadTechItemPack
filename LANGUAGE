@@ -13,6 +13,7 @@ TAG_GRAVBOOTS = "Anti-Gravity Boots";
 TAG_JACKET = "Leather Armour";
 TAG_RADIRADIO = "UAC Pocket Radio";
 TAG_CACOPLUSHIES = "Cacodemon Plushie";
+TAG_POGOSTICK = "Pogo Stick";
 
 // Pickup messages
 PICKUP_RADICOLA = "Picked up a can of Radi-Cola.";
@@ -28,6 +29,7 @@ PICKUP_FIELDMEDICKIT_USED = "Picked up a opened Field Medic Kit";
 PICKUP_FIELDMEDICKIT_EMPTY = "Picked up an empty Field Medic Kit";
 
 PICKUP_RADIRADIO = "Picked up a UAC Pocket Radio. Rock some tunes!";
+PICKUP_POGOSTICK = "You got the pogo stick!";
 
 RADICOLA_HELPTEXT = "\cd<<< \cjRADI-COLA \cd>>>\c-\n\nRadi-Cola helps provide a quick\nboost of energy and strength\nfor marines on the go.\n\n\Press altfire to share with a friend.\n\n\cgDO NOT MIX WITH STIMPACKS.\n\cgDRINK RESPONSIBLY.";
 RADICOLA_NONEED = "They don't want any.";
@@ -141,7 +143,13 @@ MENU_GRAVBOOTSLORE1 = "stuff";
 MENU_GRAVBOOTSLORE2 = "goes";
 MENU_GRAVBOOTSLORE3 = "here uwu";
 
+// Pogo Stick
+MENU_TITLEPOGOSTICK = "------ Pogo Stick Options ------";
+MENU_POGOSTICKTEXT1 = "Control the spawn rate of Pogo Sticks with Radsuits";
 
+MENU_POGOSTICKLORE1 = "stuff";
+MENU_POGOSTICKLORE2 = "goes";
+MENU_POGOSTICKLORE3 = "here uwu";
 
 
 
