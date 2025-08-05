@@ -180,3 +180,15 @@ A collection of various items for [Hideous Destructor](https://codeberg.org/mc77
 * **Fire**: Switch to next channel
 * **Alt. Fire**: Switch to previous channel
 * **Turn off radio**: Unload
+
+## Pogo Stick
+
+* **Actor Class**: `HDPogoStick`
+* **Loadout Code**: `pog`
+  * A spring-powered children's toy that allows the user to bounce around. Skillful users can use it to gain extra height to jump over tall obstacles. Can also be used to gain speed and travel over long distances, but risks the user falling over if they go too fast.
+
+### Pogo Stick Controls
+
+* **Fire**: Bounce forwards
+* **Alt. Fire**: Bounce backwards
+
