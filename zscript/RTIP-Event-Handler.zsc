@@ -225,6 +225,11 @@ class RTIPHandler : EventHandler {
         spawns_radboots.push(additementry('PortableRadsuit', radboots_spawn_bias));
         additem('RadBootsSpawn', spawns_radboots, radboots_persistent_spawning, false);
 
+        // Pogo Stick
+        Array<RTIPSpawnItemEntry> spawns_pogostick;
+        spawns_pogostick.push(additementry('PortableRadsuit', pogostick_spawn_bias));
+        additem('PogoStickSpawn', spawns_pogostick, pogostick_persistent_spawning, false);
+
         // Leather Armor
         Array<RTIPSpawnItemEntry> spawns_jacketarmour;
         spawns_jacketarmour.push(additementry('GarrisonArmour', jacketarmour_greenarmour_spawn_bias));
@@ -405,3 +410,4 @@ class RTIPHandler : EventHandler {
         }
     }
 }
+
